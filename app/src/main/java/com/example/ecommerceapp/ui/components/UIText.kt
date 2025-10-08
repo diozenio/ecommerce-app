@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.example.ecommerceapp.ui.theme.GeneralSans
 import com.example.ecommerceapp.util.percent
 
 /**
@@ -62,7 +63,7 @@ private fun uiTextStyle(
     variant: UITextVariant,
     weight: UITextWeight,
     letterSpacing: TextUnit,
-    fontFamily: FontFamily?
+    fontFamily: FontFamily? = GeneralSans
 ): TextStyle {
     // Weight
     val fw = when (weight) {

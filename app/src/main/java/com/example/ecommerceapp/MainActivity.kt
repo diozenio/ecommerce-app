@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                             .padding(horizontal = 12.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Greeting(name = "Android")
+                        Greeting(name = "My Cart")
                         UIButton(text = "Primary", variant = UIButtonVariant.Primary)
                         UIButton(text = "Secondary", variant = UIButtonVariant.Secondary)
                         UIButton(text = "Disabled", variant = UIButtonVariant.Disabled)
