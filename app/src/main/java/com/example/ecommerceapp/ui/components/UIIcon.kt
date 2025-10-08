@@ -1,11 +1,10 @@
 package com.example.ecommerceapp.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -162,12 +161,10 @@ fun UIIcon(
         UIIconName.Whatsapp -> R.drawable.whatsapp
     }
 
-    Image(
+    Icon(
         painter = painterResource(id = resId),
         contentDescription = icon.name,
-        modifier = modifier
-            .then(Modifier)
-            .size(size),
-        colorFilter = if (color != Color.Unspecified) ColorFilter.tint(color) else null
+        tint = color,
+        modifier = modifier.size(size)
     )
 }

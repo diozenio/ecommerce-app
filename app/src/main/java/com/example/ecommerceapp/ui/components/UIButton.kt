@@ -3,6 +3,7 @@ package com.example.ecommerceapp.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -46,6 +48,8 @@ object UIButtonDefaults {
 fun UIButton(
     text: String,
     onClick: () -> Unit = {},
+    leftIcon: (@Composable () -> Unit)? = null,
+    rightIcon: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
     height: Dp = 54.dp,
     fullWidth: Boolean = true,
@@ -69,12 +73,19 @@ fun UIButton(
                 colors = colors,
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
-                UIText(
-                    text,
-                    variant = UITextVariant.B1,
-                    weight = UITextWeight.Medium,
-                    color = colors.contentColor
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    leftIcon?.invoke()
+                    UIText(
+                        text,
+                        variant = UITextVariant.B1,
+                        weight = UITextWeight.Medium,
+                        color = colors.contentColor
+                    )
+                    rightIcon?.invoke()
+                }
             }
         }
 
@@ -87,12 +98,19 @@ fun UIButton(
                 colors = colors,
                 border = BorderStroke(1.dp, Colors.Primary200)
             ) {
-                UIText(
-                    text,
-                    variant = UITextVariant.B1,
-                    weight = UITextWeight.Medium,
-                    color = colors.contentColor
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    leftIcon?.invoke()
+                    UIText(
+                        text,
+                        variant = UITextVariant.B1,
+                        weight = UITextWeight.Medium,
+                        color = colors.contentColor
+                    )
+                    rightIcon?.invoke()
+                }
             }
         }
 
@@ -105,12 +123,19 @@ fun UIButton(
                 colors = colors,
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
-                UIText(
-                    text,
-                    variant = UITextVariant.B1,
-                    weight = UITextWeight.Medium,
-                    color = colors.disabledContentColor
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    leftIcon?.invoke()
+                    UIText(
+                        text,
+                        variant = UITextVariant.B1,
+                        weight = UITextWeight.Medium,
+                        color = colors.disabledContentColor
+                    )
+                    rightIcon?.invoke()
+                }
             }
         }
     }

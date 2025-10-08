@@ -46,8 +46,26 @@ class MainActivity : ComponentActivity() {
                             UIIcon(UIIconName.Home, color = Colors.Primary900)
                             Greeting(name = "My Cart")
                         }
-                        UIButton(text = "Primary", variant = UIButtonVariant.Primary)
-                        UIButton(text = "Secondary", variant = UIButtonVariant.Secondary)
+                        UIButton(
+                            text = "Primary",
+                            variant = UIButtonVariant.Primary,
+                            leftIcon = {
+                                UIIcon(
+                                    icon = UIIconName.Plus,
+                                    color = Colors.Primary0,
+                                    size = 16.dp
+                                )
+                            }
+                        )
+                        UIButton(
+                            text = "Secondary",
+                            variant = UIButtonVariant.Secondary,
+                            rightIcon = {
+                                UIIcon(
+                                    icon = UIIconName.HeartFilled,
+                                    size = 16.dp,
+                                )
+                            })
                         UIButton(text = "Disabled", variant = UIButtonVariant.Disabled)
                     }
                 }
