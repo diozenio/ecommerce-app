@@ -20,5 +20,6 @@ data class Product(
     val size: UIProductCardCartSize,
     val price: Float,
     val imageUrl: String,
-    val quantity: Int
+    val quantity: Int,
+    val isSaved: Boolean = false
 )
