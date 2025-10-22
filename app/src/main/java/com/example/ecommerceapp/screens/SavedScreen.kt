@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,6 +39,7 @@ import com.example.ecommerceapp.model.Product
 import com.example.ecommerceapp.model.SavedViewModel
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
+import com.example.ecommerceapp.ui.components.UIProductCard
 import com.example.ecommerceapp.ui.components.UIText
 import com.example.ecommerceapp.ui.components.UITextVariant
 import com.example.ecommerceapp.ui.components.UITextWeight
@@ -80,7 +82,7 @@ fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(savedItems, key = { it.id }) { product ->
-                    ProductCard(product = product, onUnsaveClick = {
+                    UIProductCard (product = product, onUnsaveClick = {
                         viewModel.unsaveItem(product)
                     })
                 }
@@ -93,55 +95,6 @@ fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
     }
 }
 
-@SuppressLint("DefaultLocale")
-@Composable
-fun ProductCard(product: Product, onUnsaveClick: () -> Unit) {
-    Column {
-        Box {
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(product.imageUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = product.title,
-                    modifier = Modifier
-                        .height(180.dp)
-                        .fillMaxWidth(),
-                    contentScale = ContentScale.Crop
-                )
-            }
-            IconButton(
-                onClick = onUnsaveClick,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .background(Color.White, shape = CircleShape)
-            ) {
-                UIIcon(icon = UIIconName.HeartFilled)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        UIText(
-            text = product.title,
-            variant = UITextVariant.B2,
-            weight = UITextWeight.SemiBold
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        UIText(
-            text = "$ ${String.format("%.2f", product.price)}",
-            variant = UITextVariant.B3,
-            color = Colors.Primary600
-        )
-    }
-}
 
 @Composable
 fun EmptySavedScreen() {

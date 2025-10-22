@@ -78,12 +78,14 @@ fun UIButton(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     leftIcon?.invoke()
-                    UIText(
-                        text,
-                        variant = UITextVariant.B1,
-                        weight = UITextWeight.Medium,
-                        color = colors.contentColor
-                    )
+                    if (!text.isEmpty()) {
+                        UIText(
+                            text,
+                            variant = UITextVariant.B1,
+                            weight = UITextWeight.Medium,
+                            color = colors.contentColor
+                        )
+                    }
                     rightIcon?.invoke()
                 }
             }
@@ -103,12 +105,14 @@ fun UIButton(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     leftIcon?.invoke()
-                    UIText(
-                        text,
-                        variant = UITextVariant.B1,
-                        weight = UITextWeight.Medium,
-                        color = colors.contentColor
-                    )
+                    if (!text.isEmpty()) {
+                        UIText(
+                            text,
+                            variant = UITextVariant.B1,
+                            weight = UITextWeight.Medium,
+                            color = colors.contentColor
+                        )
+                    }
                     rightIcon?.invoke()
                 }
             }
@@ -128,12 +132,14 @@ fun UIButton(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     leftIcon?.invoke()
-                    UIText(
-                        text,
-                        variant = UITextVariant.B1,
-                        weight = UITextWeight.Medium,
-                        color = colors.disabledContentColor
-                    )
+                    if (!text.isEmpty()) {
+                        UIText(
+                            text,
+                            variant = UITextVariant.B1,
+                            weight = UITextWeight.Medium,
+                            color = colors.disabledContentColor
+                        )
+                    }
                     rightIcon?.invoke()
                 }
             }
