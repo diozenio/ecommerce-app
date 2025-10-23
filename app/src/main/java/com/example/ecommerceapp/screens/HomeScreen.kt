@@ -105,7 +105,7 @@ fun HomeScreen() {
 }
 
 @Composable
-fun HomeHeader(modifier: Modifier = Modifier) {
+fun HomeHeader() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
