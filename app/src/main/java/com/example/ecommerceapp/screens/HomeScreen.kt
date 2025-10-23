@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +26,7 @@ import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
 import com.example.ecommerceapp.ui.components.UIInput
 import com.example.ecommerceapp.ui.components.UIProductCard
+import com.example.ecommerceapp.ui.components.UISelector
 import com.example.ecommerceapp.ui.components.UIText
 import com.example.ecommerceapp.ui.components.UITextVariant
 import com.example.ecommerceapp.ui.components.UITextWeight
@@ -36,6 +39,10 @@ fun HomeScreen() {
     var text by remember {
         mutableStateOf("")
     }
+
+    val categories = listOf("All", "Tshirts", "Jeans", "Shoes")
+
+    var selectedCategory by remember { mutableStateOf(categories.first()) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -66,6 +73,19 @@ fun HomeScreen() {
                 },
                 fullWidth = false,
             )
+        }
+        LazyRow (
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            items(categories) { category ->
+                UISelector(
+                    text = category,
+                    isSelected = category == selectedCategory,
+                    onClick = { selectedCategory = category }
+                )
+            }
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),

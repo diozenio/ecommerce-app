@@ -38,7 +38,6 @@ fun UIProductCard(product: Product, onUnsaveClick: () -> Unit) {
         Box {
             Card(
                 shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -47,6 +46,7 @@ fun UIProductCard(product: Product, onUnsaveClick: () -> Unit) {
                         .build(),
                     contentDescription = product.title,
                     placeholder = painterResource(R.drawable.fallback_square),
+                    error = painterResource(R.drawable.fallback_square),
                     modifier = Modifier
                         .aspectRatio(3f / 4f)
                         .fillMaxWidth(),
