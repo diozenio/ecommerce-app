@@ -17,6 +17,7 @@ import com.example.ecommerceapp.ui.theme.Colors
 
 @Composable
 fun UIBottomNavBar(
+    modifier: Modifier = Modifier,
     bottomNavBarItems: List<BottomNavBarItem>,
     selectedItem: BottomNavBarItem,
     onItemChanged: (BottomNavBarItem) -> Unit,
@@ -70,3 +71,6 @@ fun UIBottomNavBar(
         }
     }
 }
+
+
+

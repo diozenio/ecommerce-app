@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ecommerceapp.ui.theme.Colors
 
@@ -38,4 +39,14 @@ fun UINavHeader(
         )
         UIIcon(icon = UIIconName.Bell, modifier = Modifier.clickable { onNotificationPressed() })
     }
+}
+
+@Preview(showBackground = true, name = "Nav Header Preview")
+@Composable
+fun UINavHeaderPreview() {
+    UINavHeader(
+        title = "Meu Perfil",
+        onBackPressed = {},
+        onNotificationPressed = {}
+    )
 }

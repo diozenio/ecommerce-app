@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.IconButton
@@ -20,16 +21,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.ecommerceapp.R
 import com.example.ecommerceapp.model.Product
+import com.example.ecommerceapp.model.UIProductCardCartSize
 import com.example.ecommerceapp.ui.theme.Colors
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun UIProductCard(product: Product, onUnsaveClick: () -> Unit) {
+fun UIProductCard(modifier: Modifier = Modifier, product: Product, onUnsaveClick: () -> Unit) {
     Column(
         modifier = Modifier
             .clickable {}
@@ -77,6 +80,30 @@ fun UIProductCard(product: Product, onUnsaveClick: () -> Unit) {
             text = "$ ${String.format("%.2f", product.price)}",
             variant = UITextVariant.B3,
             color = Colors.Primary600
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Product Card Preview")
+@Composable
+fun UIProductCardPreview() {
+
+    val sampleProduct = Product(
+        1,
+        "Camiseta de Algodão Premium Azul",
+        UIProductCardCartSize.MEDIUM,
+        12.5f,
+        "https://picsum.photos/id/1015/300/400",
+        1,
+        true
+
+    )
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        UIProductCard(
+            product = sampleProduct,
+            onUnsaveClick = { /* Ação de desmarcar */ },
+            modifier = Modifier.width(180.dp)
         )
     }
 }
