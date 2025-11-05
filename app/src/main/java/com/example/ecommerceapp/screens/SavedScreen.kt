@@ -1,10 +1,12 @@
 package com.example.ecommerceapp.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,8 +39,10 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.ecommerceapp.model.Product
 import com.example.ecommerceapp.model.SavedViewModel
+import com.example.ecommerceapp.ui.components.UIEmptyState
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
+import com.example.ecommerceapp.ui.components.UINavHeader
 import com.example.ecommerceapp.ui.components.UIProductCard
 import com.example.ecommerceapp.ui.components.UIText
 import com.example.ecommerceapp.ui.components.UITextVariant
@@ -52,22 +56,12 @@ fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
     val savedItems by viewModel.savedItems.collectAsState()
 
     Scaffold(
+        containerColor = Color.White,
         topBar = {
-            TopAppBar(
-                title = { UIText(text = "Saved Items", variant = UITextVariant.H2, weight = UITextWeight.SemiBold) },
-                navigationIcon = {
-                    IconButton(onClick = { /* TODO: Handle back navigation */ }) {
-                        UIIcon(icon = UIIconName.Arrow)
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* TODO: Handle notification click */ }) {
-                        UIIcon(icon = UIIconName.Bell)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
-                )
+            UINavHeader(
+                title = "Saved Items",
+                onBackPressed = { /*TODO*/ },
+                onNotificationPressed = { /*TODO*/ }
             )
         }
     ) { paddingValues ->
@@ -95,35 +89,16 @@ fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
     }
 }
 
-
 @Composable
 fun EmptySavedScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
-        UIIcon(
+        UIEmptyState(
             icon = UIIconName.HeartDuotone,
-            color = Colors.Primary300,
-            size = 48.dp
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        UIText(
-            text = "No Saved Items",
-            variant = UITextVariant.H2,
-            weight = UITextWeight.SemiBold
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        UIText(
-            text = "You don't have any saved items.",
-            variant = UITextVariant.B3
-        )
-        UIText(
-            text = "Go to home and add some items to your saved list.",
-            variant = UITextVariant.B3
+            title = "Your Saved list Is Empty!",
+            description = "When you save products, they'll appear here."
         )
     }
 }

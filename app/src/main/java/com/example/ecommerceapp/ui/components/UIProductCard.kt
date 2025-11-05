@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,14 +31,13 @@ import com.example.ecommerceapp.ui.theme.Colors
 @SuppressLint("DefaultLocale")
 @Composable
 fun UIProductCard(product: Product, onUnsaveClick: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .clickable {}
+    Card(
+        modifier = Modifier.clickable {},
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Box {
-            Card(
-                shape = RoundedCornerShape(16.dp),
-            ) {
+        Column {
+            Box {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(product.imageUrl)
@@ -51,32 +51,34 @@ fun UIProductCard(product: Product, onUnsaveClick: () -> Unit) {
                         .fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
+                IconButton(
+                    onClick = onUnsaveClick,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                        .background(Color.White, shape = RoundedCornerShape(size = 10.dp))
+                ) {
+                    UIIcon(icon = UIIconName.HeartFilled)
+                }
             }
-            IconButton(
-                onClick = onUnsaveClick,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-                    .background(Color.White, shape = RoundedCornerShape(size = 10.dp))
-            ) {
-                UIIcon(icon = UIIconName.HeartFilled)
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                UIText(
+                    text = product.title,
+                    variant = UITextVariant.B2,
+                    weight = UITextWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                UIText(
+                    text = "$ ${String.format("%.2f", product.price)}",
+                    variant = UITextVariant.B3,
+                    color = Colors.Primary600
+                )
             }
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        UIText(
-            text = product.title,
-            variant = UITextVariant.B2,
-            weight = UITextWeight.SemiBold
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        UIText(
-            text = "$ ${String.format("%.2f", product.price)}",
-            variant = UITextVariant.B3,
-            color = Colors.Primary600
-        )
     }
 }

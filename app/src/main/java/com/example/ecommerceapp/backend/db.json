@@ -1,0 +1,31 @@
+{
+  "saved-items": [
+    {
+      "id": 1,
+      "title": "white t-shirt",
+      "size": "MEDIUM",
+      "price": 79.90,
+      "imageUrl": "https://torratorra.vteximg.com.br/arquivos/ids/2112328/28212001066137.jpg?v=638745770039470000",
+      "quantity": 1,
+      "isSaved": true
+    },
+    {
+      "id": 2,
+      "title": "Regular Jeans",
+      "size": "LARGE",
+      "price": 199.99,
+      "imageUrl": "https://torratorra.vteximg.com.br/arquivos/ids/2112327/28212001066136.jpg?v=638745770039470000",
+      "quantity": 1,
+      "isSaved": true
+    },
+    {
+      "id": 3,
+      "title": "Polo Wear",
+      "size": "SMALL",
+      "price": 349.50,
+      "imageUrl": "https://torratorra.vteximg.com.br/arquivos/ids/2112343/28212001066143.jpg?v=638745770039470000",
+      "quantity": 1,
+      "isSaved": true
+    }
+  ]
+}
