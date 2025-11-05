@@ -10,7 +10,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ecommerceapp.ui.theme.Colors
@@ -24,7 +24,9 @@ fun UIInput(
     leadingIcon: UIIconName? = null,
     trailingIcon: UIIconName? = null,
     placeholderText: String? = null,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+
     singleLine: Boolean = true,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -39,7 +41,7 @@ fun UIInput(
                     icon = leadingIcon,
                     color = Colors.Primary300,
 
-                )
+                    )
             }
         },
         trailingIcon = {
@@ -60,7 +62,10 @@ fun UIInput(
                 )
             }
         },
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+
+        keyboardOptions = keyboardOptions,
+        visualTransformation = visualTransformation,
+
         singleLine = singleLine,
         enabled = enabled,
         readOnly = readOnly,
@@ -94,4 +99,3 @@ fun UIInputPreview(){
 
     }
 }
-

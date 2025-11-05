@@ -78,7 +78,8 @@ class MainActivity : ComponentActivity() {
                     },
                     onNavigateToLogin = {
                         navController.navigate("login")
-                    }
+                    },
+                    onNavigateToTerms = TODO()
                 )
             }
             composable("login") {
