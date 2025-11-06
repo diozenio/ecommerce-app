@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -44,6 +45,7 @@ fun UIText(
     overflow: TextOverflow = TextOverflow.Clip,
     letterSpacing: TextUnit = TextUnit.Unspecified,
     fontFamily: FontFamily? = null,
+    textDecoration: TextDecoration? = null
 ) {
     val style = uiTextStyle(
         variant = variant,
@@ -51,10 +53,15 @@ fun UIText(
         letterSpacing = letterSpacing,
         fontFamily = fontFamily
     )
+
+    val finalStyle = style.copy(
+        textDecoration = textDecoration
+    )
+
     Text(
         text = text,
         modifier = modifier,
-        style = style,
+        style = finalStyle,
         color = color,
         textAlign = textAlign,
         maxLines = maxLines,

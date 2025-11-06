@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +44,7 @@ fun SignUpScreen(
     var nome by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
+    var confirmarSenha by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -127,6 +127,28 @@ fun SignUpScreen(
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        UIText(
+            text = "Confirmar senha",
+            color = Colors.Primary900,
+            weight = UITextWeight.SemiBold
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        UIInput(
+            text = confirmarSenha,
+            onChangeValue = { confirmarSenha = it },
+            placeholderText = "Repita a sua senha",
+            modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             )
         )
@@ -164,13 +186,18 @@ fun SignUpScreen(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
+            UIText(
                 text = "Já possui uma conta? ",
+                variant = UITextVariant.B1,
+                color = Colors.Primary600
             )
-            Text(
+            UIText(
                 text = "Entre",
                 modifier = Modifier.clickable { onNavigateToLogin() },
-                style = TextStyle(textDecoration = TextDecoration.Underline)
+                variant = UITextVariant.B1,
+                weight = UITextWeight.Medium,
+                color = Colors.Primary900,
+                textDecoration = TextDecoration.Underline
             )
         }
     }
