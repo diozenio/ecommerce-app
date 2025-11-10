@@ -79,7 +79,9 @@ class MainActivity : ComponentActivity() {
                     onNavigateToLogin = {
                         navController.navigate("login")
                     },
-                    onNavigateToTerms = TODO()
+                    onNavigateToTerms = {
+                        navController.navigate("terms")
+                    }
                 )
             }
             composable("login") {
