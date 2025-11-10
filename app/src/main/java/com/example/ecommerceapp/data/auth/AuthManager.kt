@@ -1,18 +1,33 @@
 package com.example.ecommerceapp.data.auth
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import com.example.ecommerceapp.model.UserSession
+import kotlinx.coroutines.flow.Flow
+import java.io.IOException
 
-object AuthManager {
-    var isAuthenticated by mutableStateOf(false)
-        private set
+class AuthManager(
+    private val authService: AuthService,
+    private val userSessionDao: UserSessionDao
+) {
+    suspend fun register(name: String, email: String, password: String): Boolean {
+        return try {
+            val request = SignUpRequest(fullName = name, email = email, password = password)
+            val response = authService.signup(request)
 
-    fun login() {
-        isAuthenticated = true
+            response.isSuccessful
+        } catch (e: IOException) {
+            false
+        }
     }
 
-    fun logout() {
-        isAuthenticated = false
+    suspend fun login(email: String, password: String): Boolean {
+        return false
+    }
+
+    fun getActiveSession(): Flow<UserSession?> {
+        return userSessionDao.getActiveSession()
+    }
+
+    suspend fun logout() {
+        userSessionDao.deleteSession()
     }
 }
