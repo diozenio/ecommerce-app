@@ -19,8 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.ecommerceapp.data.cart.CartManager
+import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.ui.components.UIButton
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
@@ -34,7 +36,9 @@ import com.example.ecommerceapp.ui.theme.Colors
 
 @Composable
 fun HomeScreen() {
-    val products = CartManager.products
+    val dao = DatabaseHelper.getInstance(context = LocalContext.current).cartDao()
+    val manager = CartManager(dao)
+    val products = manager.items
 
     var text by remember {
         mutableStateOf("")
@@ -74,7 +78,7 @@ fun HomeScreen() {
                 fullWidth = false,
             )
         }
-        LazyRow (
+        LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,7 +99,7 @@ fun HomeScreen() {
         ) {
             items(products, { it.id }) { product ->
                 UIProductCard(
-                    product = product,
+                    product = product.product,
                     onUnsaveClick = {},
                 )
             }

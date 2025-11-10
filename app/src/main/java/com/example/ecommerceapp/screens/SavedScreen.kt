@@ -1,23 +1,15 @@
 package com.example.ecommerceapp.screens
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -29,13 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.example.ecommerceapp.model.Product
 import com.example.ecommerceapp.model.SavedViewModel
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
@@ -54,7 +41,13 @@ fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { UIText(text = "Saved Items", variant = UITextVariant.H2, weight = UITextWeight.SemiBold) },
+                title = {
+                    UIText(
+                        text = "Saved Items",
+                        variant = UITextVariant.H2,
+                        weight = UITextWeight.SemiBold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { /* TODO: Handle back navigation */ }) {
                         UIIcon(icon = UIIconName.Arrow)
@@ -81,9 +74,9 @@ fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(savedItems, key = { it.id }) { product ->
-                    UIProductCard (product = product, onUnsaveClick = {
-                        viewModel.unsaveItem(product)
+                items(savedItems, key = { it.id }) { item ->
+                    UIProductCard(product = item.product, onUnsaveClick = {
+                        viewModel.unsaveItem(item.product)
                     })
                 }
             }
