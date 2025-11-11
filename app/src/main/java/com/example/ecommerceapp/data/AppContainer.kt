@@ -8,6 +8,7 @@ import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.data.auth.UserSessionDao
 import com.example.ecommerceapp.data.core.ApiService
 import com.example.ecommerceapp.data.core.DatabaseHelper
+import com.example.ecommerceapp.screens.auth.LoginViewModel
 import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
 
 object AppContainer {
@@ -56,6 +57,24 @@ object AppContainer {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 return MainViewModel(authManager) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+
+    fun provideLoginViewModelFactory(context: Context): LoginViewModelFactory {
+        return LoginViewModelFactory(
+            authManager = getAuthManager(context)
+        )
+    }
+
+    class LoginViewModelFactory(
+        private val authManager: AuthManager
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return LoginViewModel(authManager) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
