@@ -27,8 +27,28 @@ class AuthManager(
         }
     }
 
-    suspend fun login(email: String, password: String): Boolean {
-        return false
+    suspend fun login(email: String, password: String): AuthResult {
+        return try {
+            val request = LoginRequest(email = email, password = password)
+            val response = authService.login(request)
+
+            if (response.isSuccessful && response.body() != null) {
+                val userFromApi = response.body()!!.user
+
+                val session = UserSession(
+                    id = userFromApi.id,
+                    fullName = userFromApi.fullName,
+                    email = userFromApi.email
+                )
+                userSessionDao.saveSession(session)
+
+                AuthResult.Success(user = userFromApi)
+            } else {
+                AuthResult.ApiError("E-mail ou senha inválidos.")
+            }
+        } catch (e: IOException) {
+            AuthResult.NetworkError
+        }
     }
 
     fun getActiveSession(): Flow<UserSession?> {
