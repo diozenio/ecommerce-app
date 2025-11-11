@@ -12,7 +12,7 @@ object ItemSaved {
 
     fun addItem(product: Product) {
         _savedItems.update { currentList ->
-            if (currentList.any { it.id == product.id }) {
+            if (currentList.any { it.product.id == product.id }) {
                 currentList
             } else {
                 val newSavedItem = SavedItem(product = product)
@@ -23,19 +23,11 @@ object ItemSaved {
 
     fun removeItem(product: Product) {
         _savedItems.update { currentList ->
-            currentList.filterNot { it.id == product.id }
+            currentList.filterNot { it.product.id == product.id }
         }
     }
 
-    fun isItemSaved(productId: Int): Boolean {
-        return _savedItems.value.any { it.id == productId }
-    }
-
-    fun clearAll() {
-        _savedItems.value = emptyList()
-    }
-
-    fun addMockData() {
-
+    fun isItemSaved(productId: String): Boolean {
+        return _savedItems.value.any { it.product.id == productId }
     }
 }

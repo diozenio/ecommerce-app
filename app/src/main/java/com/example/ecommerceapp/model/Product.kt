@@ -15,12 +15,12 @@ fun UIProductCardCartSize.toSizeString(): String {
 }
 
 data class Category(
-    val id: Int,
+    val id: String,
     val title: String,
 )
 
 data class Product(
-    val id: Int,
+    val id: String,
     val title: String,
     val size: UIProductCardCartSize,
     val price: Float,

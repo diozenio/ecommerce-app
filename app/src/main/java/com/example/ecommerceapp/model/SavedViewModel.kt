@@ -18,10 +18,6 @@ class SavedViewModel : ViewModel() {
             initialValue = false
         )
 
-    init {
-        ItemSaved.addMockData()
-    }
-
     fun unsaveItem(product: Product) {
         ItemSaved.removeItem(product)
     }
