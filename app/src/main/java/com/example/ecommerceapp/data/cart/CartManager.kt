@@ -1,90 +1,44 @@
 package com.example.ecommerceapp.data.cart
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import com.example.ecommerceapp.model.Product
-import com.example.ecommerceapp.model.UIProductCardCartSize
+import com.example.ecommerceapp.data.core.BaseManager
+import com.example.ecommerceapp.model.CartItem
 
-object CartManager {
-    var products by mutableStateOf(
-        listOf(
-            Product(
-                id = 1,
-                title = "Regular Fit Slogan",
-                size = UIProductCardCartSize.LARGE,
-                price = 1000F,
-                imageUrl = "https://torratorra.vteximg.com.br/arquivos/ids/2112327/28212001066136.jpg?v=638745770039470000",
-                quantity = 1
-            ),
-            Product(
-                id = 2,
-                title = "Basic Cotton T-shirt",
-                size = UIProductCardCartSize.MEDIUM,
-                price = 799.90F,
-                imageUrl = "https://torratorra.vteximg.com.br/arquivos/ids/2112328/28212001066137.jpg?v=638745770039470000",
-                quantity = 2
-            ),
-            Product(
-                id = 3,
-                title = "Slim Fit Jeans",
-                size = UIProductCardCartSize.LARGE,
-                price = 1899.99F,
-                imageUrl = "https://torratorra.vteximg.com.br/arquivos/ids/2112340/28212001066140.jpg?v=638745770039470000",
-                quantity = 1
-            ),
-            Product(
-                id = 4,
-                title = "Oversized Hoodie",
-                size = UIProductCardCartSize.LARGE,
-                price = 2499.50F,
-                imageUrl = "https://torratorra.vteximg.com.br/arquivos/ids/2112342/28212001066142.jpg?v=638745770039470000",
-                quantity = 1
-            ),
-            Product(
-                id = 5,
-                title = "Classic Polo Shirt",
-                size = UIProductCardCartSize.MEDIUM,
-                price = 1299.00F,
-                imageUrl = "https://torratorra.vteximg.com.br/arquivos/ids/2112343/28212001066143.jpg?v=638745770039470000",
-                quantity = 3
-            )
-        )
-    )
-        private set
-
-    const val VAT_PERCENTAGE = 0.12F // 12%
-    const val SHIPPING_FEE_MOCK = 14.99F
+class CartManager(
+    dao: CartDao,
+    private val vatPercentage: Float = 0.12F,
+    private val shippingFeeMock: Float = 14.99F
+) : BaseManager<CartItem>(dao) {
 
     val subtotal: Float
-        get() = products.sumOf { (it.price * it.quantity).toDouble() }.toFloat()
+        get() = items.sumOf { (it.product.price * it.quantity).toDouble() }.toFloat()
 
     val vat: Float
-        get() = subtotal * VAT_PERCENTAGE
+        get() = subtotal * vatPercentage
 
     val shippingFee: Float
-        get() = if (products.isEmpty()) 0F else SHIPPING_FEE_MOCK
+        get() = if (items.isEmpty()) 0F else shippingFeeMock
 
     val total: Float
         get() = subtotal + vat + shippingFee
 
-    fun incrementQuantity(productId: Int) {
-        products = products.map {
-            if (it.id == productId) it.copy(quantity = it.quantity + 1) else it
+    suspend fun incrementQuantity(itemId: Int) {
+        val item = items.find { it.id == itemId }
+        if (item == null) return
+
+        val updatedItem = item.copy(quantity = item.quantity + 1)
+        updateItem(updatedItem)
+    }
+
+    suspend fun decrementQuantity(itemId: Int) {
+        val item = items.find { it.id == itemId }
+        if (item == null) return
+
+        val updatedItem = if (item.quantity > 1) {
+            item.copy(quantity = item.quantity - 1)
+        } else {
+            return
         }
-    }
 
-    fun decrementQuantity(productId: Int) {
-        products = products.map {
-            if (it.id == productId && it.quantity > 1) it.copy(quantity = it.quantity - 1) else it
-        }
-    }
-
-    fun removeProduct(productId: Int) {
-        products = products.filterNot { it.id == productId }
-    }
-
-    fun clearCart() {
-        products = emptyList()
+        updateItem(updatedItem)
     }
 }

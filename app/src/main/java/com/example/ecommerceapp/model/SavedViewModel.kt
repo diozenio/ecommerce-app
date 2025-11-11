@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class SavedViewModel : ViewModel() {
-    val savedItems: StateFlow<List<Product>> = ItemSaved.savedItems
+    val savedItems: StateFlow<List<SavedItem>> = ItemSaved.savedItems
     val hasSavedItems: StateFlow<Boolean> = savedItems
         .map { it.isNotEmpty() }
         .stateIn(
