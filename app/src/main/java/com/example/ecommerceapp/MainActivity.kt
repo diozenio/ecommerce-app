@@ -137,6 +137,7 @@ class MainActivity : ComponentActivity() {
             containerColor = Colors.Primary0,
             bottomBar = {
                 UIBottomNavBar(
+                    modifier = Modifier,
                     bottomNavBarItems,
                     selectedItem,
                     onItemChanged = onBottomNavBarItemChange

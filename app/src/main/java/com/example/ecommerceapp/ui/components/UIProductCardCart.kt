@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.ecommerceapp.R
@@ -32,6 +33,7 @@ import com.example.ecommerceapp.util.toCurrencyString
 
 @Composable
 fun UIProductCardCart(
+    modifier: Modifier = Modifier,
     title: String,
     size: UIProductCardCartSize,
     price: Float,
@@ -144,5 +146,22 @@ fun UIProductCardCart(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Card (Qtd = 1)")
+@Composable
+fun UIProductCardCartPreviewQuantityOne() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        UIProductCardCart(
+            title = "Jaqueta de Couro",
+            size = UIProductCardCartSize.MEDIUM,
+            price = 399.50f,
+            imageUrl = "https://picsum.photos/id/106/200/200",
+            quantity = 1,
+            onRemoveItem = { },
+            onIncrement = { },
+            onDecrement = { }
+        )
     }
 }

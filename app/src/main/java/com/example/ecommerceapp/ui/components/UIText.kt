@@ -1,5 +1,7 @@
 package com.example.ecommerceapp.ui.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,7 +12,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ecommerceapp.ui.theme.GeneralSans
 import com.example.ecommerceapp.util.percent
@@ -57,6 +61,7 @@ fun UIText(
         overflow = overflow
     )
 }
+
 
 @Composable
 private fun uiTextStyle(
@@ -148,6 +153,60 @@ private fun uiTextStyle(
                 fontWeight = fw,
                 letterSpacing = letterSpacing,
                 fontFamily = fontFamily ?: MaterialTheme.typography.bodySmall.fontFamily
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Variantes de Texto")
+@Composable
+fun UITextPreview() {
+    MaterialTheme {
+        Column(modifier = Modifier.padding(16.dp)) {
+            UIText(
+                text = "H1 Title",
+                variant = UITextVariant.H1,
+                weight = UITextWeight.SemiBold
+            )
+            UIText(
+                text = "H2 Title",
+                variant = UITextVariant.H2,
+                weight = UITextWeight.SemiBold
+            )
+            UIText(
+                text = "H3 Title",
+                variant = UITextVariant.H3,
+                weight = UITextWeight.SemiBold
+            )
+            UIText(
+                text = "H4 Title",
+                variant = UITextVariant.H4,
+                weight = UITextWeight.Medium
+            )
+            UIText(
+                text = "B1 Body Regular",
+                variant = UITextVariant.B1,
+                weight = UITextWeight.Regular
+            )
+            UIText(
+                text = "B1 Body Medium",
+                variant = UITextVariant.B1,
+                weight = UITextWeight.Medium
+            )
+            UIText(
+                text = "B2 Body SemiBold",
+                variant = UITextVariant.B2,
+                weight = UITextWeight.SemiBold
+            )
+            UIText(
+                text = "B3 Body Regular",
+                variant = UITextVariant.B3,
+                weight = UITextWeight.Regular
+            )
+            UIText(
+                text = "Texto com cor customizada",
+                variant = UITextVariant.B1,
+                color = Color.Blue
             )
         }
     }

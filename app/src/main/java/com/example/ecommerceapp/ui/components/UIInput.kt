@@ -1,5 +1,9 @@
 package com.example.ecommerceapp.ui.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
@@ -7,11 +11,14 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ecommerceapp.ui.theme.Colors
 
+
 @Composable
 fun UIInput(
+    modifier: Modifier = Modifier,
     text: String,
     onChangeValue: (String) -> Unit,
     leadingIcon: UIIconName? = null,
@@ -21,7 +28,6 @@ fun UIInput(
     singleLine: Boolean = true,
     enabled: Boolean = true,
     readOnly: Boolean = false,
-    modifier: Modifier
 ) {
 
     OutlinedTextField(
@@ -67,3 +73,25 @@ fun UIInput(
         modifier = modifier,
     )
 }
+
+@Preview(showBackground = true)
+@Composable
+fun UIInputPreview(){
+    Column(modifier = Modifier.padding(16.dp)) {
+        UIInput(
+            text = "",
+            onChangeValue = {},
+            placeholderText = "Digite seu e-mail"
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        UIInput(
+            text = "meu.email@exemplo.com",
+            onChangeValue = {},
+            placeholderText = "Digite seu e-mail"
+        )
+
+    }
+}
+
