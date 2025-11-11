@@ -95,7 +95,7 @@ fun FilledCart(manager: CartManager) {
             items(items, key = { it.id }) { item ->
                 UIProductCardCart(
                     title = item.product.title,
-                    size = item.product.size,
+                    size = item.size,
                     price = item.product.price,
                     imageUrl = item.product.imageUrl,
                     quantity = item.quantity,

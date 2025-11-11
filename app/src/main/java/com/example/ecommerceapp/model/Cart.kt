@@ -8,5 +8,6 @@ data class CartItem(
     @PrimaryKey(autoGenerate = true)
     override val id: Int = 0,
     val quantity: Int,
+    val size: ProductSize,
     val product: Product,
 ) : Model

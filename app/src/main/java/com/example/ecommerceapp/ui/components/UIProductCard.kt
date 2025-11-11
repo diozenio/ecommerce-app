@@ -29,7 +29,6 @@ import coil.request.ImageRequest
 import com.example.ecommerceapp.R
 import com.example.ecommerceapp.model.Category
 import com.example.ecommerceapp.model.Product
-import com.example.ecommerceapp.model.UIProductCardCartSize
 import com.example.ecommerceapp.ui.theme.Colors
 
 @SuppressLint("DefaultLocale")
@@ -105,7 +104,6 @@ fun UIProductCardPreview() {
     val sampleProduct = Product(
         id = "id",
         title = "Camiseta de Algodão Premium Azul",
-        size = UIProductCardCartSize.MEDIUM,
         price = 12.5f,
         imageUrl = "https://picsum.photos/id/1015/300/400",
         discount = 12f,

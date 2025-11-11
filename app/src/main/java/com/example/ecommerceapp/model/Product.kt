@@ -1,16 +1,16 @@
 package com.example.ecommerceapp.model
 
-enum class UIProductCardCartSize {
+enum class ProductSize {
     SMALL,
     MEDIUM,
     LARGE
 }
 
-fun UIProductCardCartSize.toSizeString(): String {
+fun ProductSize.toSizeString(): String {
     return when (this) {
-        UIProductCardCartSize.LARGE -> "Size L"
-        UIProductCardCartSize.MEDIUM -> "Size M"
-        UIProductCardCartSize.SMALL -> "Size S"
+        ProductSize.LARGE -> "Size L"
+        ProductSize.MEDIUM -> "Size M"
+        ProductSize.SMALL -> "Size S"
     }
 }
 
@@ -22,7 +22,7 @@ data class Category(
 data class Product(
     val id: String,
     val title: String,
-    val size: UIProductCardCartSize,
+    val sizes: List<ProductSize> = emptyList(),
     val price: Float,
     val imageUrl: String,
     val discount: Float = 0F,
