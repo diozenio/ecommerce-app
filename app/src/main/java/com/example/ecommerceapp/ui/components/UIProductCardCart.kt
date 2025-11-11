@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.ecommerceapp.R
-import com.example.ecommerceapp.model.UIProductCardCartSize
+import com.example.ecommerceapp.model.ProductSize
 import com.example.ecommerceapp.model.toSizeString
 import com.example.ecommerceapp.ui.theme.Colors
 import com.example.ecommerceapp.util.toCurrencyString
@@ -35,7 +35,7 @@ import com.example.ecommerceapp.util.toCurrencyString
 fun UIProductCardCart(
     modifier: Modifier = Modifier,
     title: String,
-    size: UIProductCardCartSize,
+    size: ProductSize,
     price: Float,
     imageUrl: String,
     quantity: Int = 0,
@@ -155,7 +155,7 @@ fun UIProductCardCartPreviewQuantityOne() {
     Column(modifier = Modifier.padding(16.dp)) {
         UIProductCardCart(
             title = "Jaqueta de Couro",
-            size = UIProductCardCartSize.MEDIUM,
+            size = ProductSize.MEDIUM,
             price = 399.50f,
             imageUrl = "https://picsum.photos/id/106/200/200",
             quantity = 1,
