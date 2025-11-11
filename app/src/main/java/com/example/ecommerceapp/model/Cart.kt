@@ -3,6 +3,11 @@ package com.example.ecommerceapp.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+data class CartTaxes(
+    val vat: Float,
+    val shippingFee: Float
+)
+
 @Entity(tableName = "cart")
 data class CartItem(
     @PrimaryKey(autoGenerate = true)
