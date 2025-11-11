@@ -28,7 +28,9 @@ abstract class DatabaseHelper : RoomDatabase() {
                     context,
                     DatabaseHelper::class.java,
                     "ecommerce.db"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = instance
                 instance

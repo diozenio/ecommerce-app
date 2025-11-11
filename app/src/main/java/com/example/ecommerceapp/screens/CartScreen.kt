@@ -42,6 +42,7 @@ fun CartScreen() {
 
     LaunchedEffect(Unit) {
         manager.findAll()
+        manager.findAllTaxes()
     }
 
     if (manager.items.isEmpty()) {
@@ -95,7 +96,7 @@ fun FilledCart(manager: CartManager) {
             items(items, key = { it.id }) { item ->
                 UIProductCardCart(
                     title = item.product.title,
-                    size = item.product.size,
+                    size = item.size,
                     price = item.product.price,
                     imageUrl = item.product.imageUrl,
                     quantity = item.quantity,
@@ -148,7 +149,7 @@ fun FilledCart(manager: CartManager) {
                             color = Colors.Primary500
                         )
                         UIText(
-                            text = manager.vat.toCurrencyString(),
+                            text = manager.vat,
                             variant = UITextVariant.B1,
                             weight = UITextWeight.Medium
                         )
@@ -165,7 +166,7 @@ fun FilledCart(manager: CartManager) {
                             color = Colors.Primary500
                         )
                         UIText(
-                            text = manager.shippingFee.toCurrencyString(),
+                            text = manager.shippingFee,
                             variant = UITextVariant.B1,
                             weight = UITextWeight.Medium
                         )
