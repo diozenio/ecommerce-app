@@ -8,14 +8,22 @@ class AuthManager(
     private val authService: AuthService,
     private val userSessionDao: UserSessionDao
 ) {
-    suspend fun register(name: String, email: String, password: String): Boolean {
+    suspend fun register(name: String, email: String, password: String): AuthResult {
         return try {
             val request = SignUpRequest(fullName = name, email = email, password = password)
             val response = authService.signup(request)
 
-            response.isSuccessful
+            if (response.isSuccessful) {
+                AuthResult.Success()
+            } else {
+                if (response.code() == 400) {
+                    AuthResult.ApiError("Este e-mail já está em uso.")
+                } else {
+                    AuthResult.ApiError("Erro desconhecido da API.")
+                }
+            }
         } catch (e: IOException) {
-            false
+            AuthResult.NetworkError
         }
     }
 

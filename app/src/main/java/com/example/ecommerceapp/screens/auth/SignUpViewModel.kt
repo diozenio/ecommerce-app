@@ -3,6 +3,7 @@ package com.example.ecommerceapp.screens.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecommerceapp.data.auth.AuthManager
+import com.example.ecommerceapp.data.auth.AuthResult
 import com.example.ecommerceapp.util.validateEmail
 import com.example.ecommerceapp.util.validateName
 import com.example.ecommerceapp.util.validatePassword
@@ -108,22 +109,33 @@ class SignUpViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val success = authManager.register(
+            val result = authManager.register(
                 name = _uiState.value.name,
                 email = _uiState.value.email,
                 password = _uiState.value.password
             )
 
-            if (success) {
-                _uiState.update {
-                    it.copy(isLoading = false, registrationSuccess = true)
+            when (result) {
+                is AuthResult.Success -> {
+                    _uiState.update {
+                        it.copy(isLoading = false, registrationSuccess = true)
+                    }
                 }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        emailError = "Este e-mail já está em uso"
-                    )
+                is AuthResult.ApiError -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            emailError = result.message
+                        )
+                    }
+                }
+                is AuthResult.NetworkError -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            emailError = "Sem conexão. Tente novamente."
+                        )
+                    }
                 }
             }
         }
