@@ -91,6 +91,7 @@ class MainActivity : ComponentActivity() {
                         navController.navigate("login")
                     },
                     onNavigateToTerms = {
+                        navController.navigate("terms")
                     }
                 )
             }

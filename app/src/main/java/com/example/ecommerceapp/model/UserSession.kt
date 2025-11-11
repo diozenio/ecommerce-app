@@ -8,6 +8,5 @@ data class UserSession(
     @PrimaryKey
     val id: String,
     val fullName: String,
-    val email: String,
-    val token: String? = null
+    val email: String
 )
