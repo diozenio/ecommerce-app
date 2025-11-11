@@ -14,12 +14,17 @@ fun UIProductCardCartSize.toSizeString(): String {
     }
 }
 
+data class Category(
+    val id: Int,
+    val title: String,
+)
+
 data class Product(
     val id: Int,
     val title: String,
     val size: UIProductCardCartSize,
     val price: Float,
     val imageUrl: String,
-    val quantity: Int,
-    val isSaved: Boolean = false
+    val discount: Float = 0F,
+    val category: Category,
 )

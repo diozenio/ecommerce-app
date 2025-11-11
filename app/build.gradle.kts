@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27"
 }
 
 android {
@@ -40,9 +42,16 @@ android {
 }
 
 dependencies {
-    //noinspection UseTomlInstead
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation(libs.androidx.navigation.compose)
+
+    // Room
+    implementation("androidx.room:room-runtime:2.8.1")
+    ksp("androidx.room:room-compiler:2.8.1")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

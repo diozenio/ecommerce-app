@@ -11,11 +11,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.ecommerceapp.data.cart.CartManager
+import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.ui.components.UIButton
 import com.example.ecommerceapp.ui.components.UIEmptyState
 import com.example.ecommerceapp.ui.components.UIIcon
@@ -27,15 +32,22 @@ import com.example.ecommerceapp.ui.components.UITextVariant
 import com.example.ecommerceapp.ui.components.UITextWeight
 import com.example.ecommerceapp.ui.theme.Colors
 import com.example.ecommerceapp.util.toCurrencyString
+import kotlinx.coroutines.launch
 
 @Composable
 fun CartScreen() {
-    val products = CartManager.products
+    val context = LocalContext.current
+    val dao = remember { DatabaseHelper.getInstance(context).cartDao() }
+    val manager = remember { CartManager(dao) }
 
-    if (products.isEmpty()) {
+    LaunchedEffect(Unit) {
+        manager.findAll()
+    }
+
+    if (manager.items.isEmpty()) {
         EmptyCart()
     } else {
-        FilledCart()
+        FilledCart(manager)
     }
 }
 
@@ -60,8 +72,9 @@ fun EmptyCart() {
 }
 
 @Composable
-fun FilledCart() {
-    val products = CartManager.products
+fun FilledCart(manager: CartManager) {
+    val items = manager.items
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -79,16 +92,28 @@ fun FilledCart() {
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            items(products, key = { it.id }) { product ->
+            items(items, key = { it.id }) { item ->
                 UIProductCardCart(
-                    title = product.title,
-                    size = product.size,
-                    price = product.price,
-                    imageUrl = product.imageUrl,
-                    quantity = product.quantity,
-                    onRemoveItem = { CartManager.removeProduct(product.id) },
-                    onIncrement = { CartManager.incrementQuantity(product.id) },
-                    onDecrement = { CartManager.decrementQuantity(product.id) },
+                    title = item.product.title,
+                    size = item.product.size,
+                    price = item.product.price,
+                    imageUrl = item.product.imageUrl,
+                    quantity = item.quantity,
+                    onRemoveItem = {
+                        scope.launch {
+                            manager.removeItem(item)
+                        }
+                    },
+                    onIncrement = {
+                        scope.launch {
+                            manager.incrementQuantity(item.id)
+                        }
+                    },
+                    onDecrement = {
+                        scope.launch {
+                            manager.decrementQuantity(item.id)
+                        }
+                    },
                 )
             }
             item {
@@ -106,7 +131,7 @@ fun FilledCart() {
                             color = Colors.Primary500
                         )
                         UIText(
-                            text = CartManager.subtotal.toCurrencyString(),
+                            text = manager.subtotal.toCurrencyString(),
                             variant = UITextVariant.B1,
                             weight = UITextWeight.Medium
                         )
@@ -123,7 +148,7 @@ fun FilledCart() {
                             color = Colors.Primary500
                         )
                         UIText(
-                            text = CartManager.vat.toCurrencyString(),
+                            text = manager.vat.toCurrencyString(),
                             variant = UITextVariant.B1,
                             weight = UITextWeight.Medium
                         )
@@ -140,7 +165,7 @@ fun FilledCart() {
                             color = Colors.Primary500
                         )
                         UIText(
-                            text = CartManager.shippingFee.toCurrencyString(),
+                            text = manager.shippingFee.toCurrencyString(),
                             variant = UITextVariant.B1,
                             weight = UITextWeight.Medium
                         )
@@ -164,7 +189,7 @@ fun FilledCart() {
                             variant = UITextVariant.B1,
                         )
                         UIText(
-                            text = CartManager.total.toCurrencyString(),
+                            text = manager.total.toCurrencyString(),
                             variant = UITextVariant.B1,
                             weight = UITextWeight.SemiBold
                         )
