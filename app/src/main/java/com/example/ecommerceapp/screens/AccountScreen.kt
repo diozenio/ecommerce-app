@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.ecommerceapp.ui.components.NavItem
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
@@ -17,7 +18,7 @@ import com.example.ecommerceapp.ui.components.UINavItemColors
 import com.example.ecommerceapp.ui.theme.Colors
 
 @Composable
-fun AccountScreen() {
+fun AccountScreen(navController: NavHostController) {
     val headingNavItems = listOf(
         NavItem("My Orders", UIIconName.Box, { /*...*/ }),
     )
@@ -33,7 +34,9 @@ fun AccountScreen() {
     )
 
     Column(Modifier.fillMaxSize()) {
-        UINavHeader(title = "Account", onBackPressed = {}, onNotificationPressed = {})
+        UINavHeader(title = "Account", onBackPressed = {}, onNotificationPressed = {
+            navController.navigate("notification")
+        })
         HorizontalDivider(Modifier.padding(horizontal = 32.dp), 1.dp, Colors.Primary100)
 
         headingNavItems.forEach {

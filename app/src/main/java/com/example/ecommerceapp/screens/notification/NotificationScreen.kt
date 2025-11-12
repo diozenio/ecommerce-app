@@ -1,6 +1,5 @@
 package com.example.ecommerceapp.screens.notification
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,7 +60,6 @@ fun NotificationScreen(navController: NavHostController, modifier: Modifier = Mo
         ) {
             Column(
                 modifier = modifier
-                    .padding(horizontal = 16.dp)
                     .fillMaxSize()
             ) {
 
@@ -70,40 +68,44 @@ fun NotificationScreen(navController: NavHostController, modifier: Modifier = Mo
                     onBackPressed = { navController.popBackStack() },
                 )
 
-                if (groupedNotifications.isEmpty()) {
-                    UIEmptyState(
-                        icon = UIIconName.BellDuotone,
-                        title = "You haven’t gotten any notifications yet!",
-                        description = "We’ll alert you when something cool happens."
-                    )
-                } else {
-                    LazyColumn {
-                        groupedNotifications.forEach { (dateGroup, notifications) ->
-                            item {
-                                UIText(
-                                    text = dateGroup,
-                                    modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
-                                    weight = UITextWeight.SemiBold
-                                )
+                Column(
+                    modifier = modifier
+                        .padding(horizontal = 24.dp)
+                ) {
+                    if (groupedNotifications.isEmpty()) {
+                        UIEmptyState(
+                            icon = UIIconName.BellDuotone,
+                            title = "You haven’t gotten any notifications yet!",
+                            description = "We’ll alert you when something cool happens."
+                        )
+                    } else {
+                        LazyColumn {
+                            groupedNotifications.forEach { (dateGroup, notifications) ->
+                                item {
+                                    UIText(
+                                        text = dateGroup,
+                                        modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
+                                        weight = UITextWeight.SemiBold
+                                    )
 
 
-                                if (dateGroup != "Today") {
-                                    HorizontalDivider(color = Color.LightGray.copy(alpha = 0.7f))
+                                    if (dateGroup != "Today") {
+                                        HorizontalDivider(color = Color.LightGray.copy(alpha = 0.7f))
+                                    }
                                 }
-                            }
 
-                            items(notifications) { notification ->
-                                NotificationItem(notification = notification)
+                                items(notifications) { notification ->
+                                    NotificationItem(notification = notification)
 
 
-                                if (notification != notifications.last()) {
-                                    HorizontalDivider(color = Color.LightGray.copy(alpha = 0.7f))
+                                    if (notification != notifications.last()) {
+                                        HorizontalDivider(color = Color.LightGray.copy(alpha = 0.7f))
+                                    }
                                 }
                             }
                         }
                     }
                 }
-
             }
         }
     }

@@ -8,7 +8,7 @@ import com.example.ecommerceapp.data.core.RetrofitClient
 import com.example.ecommerceapp.model.Category
 
 class CategoryManager {
-    var loadingState by mutableStateOf(false)
+    var loadingState by mutableStateOf(true)
         private set
 
     var categories by mutableStateOf(
@@ -20,7 +20,6 @@ class CategoryManager {
 
     suspend fun getCategories() {
         try {
-            loadingState = true
             categories = categories + RetrofitClient.categoryApi.getCategories()
 
             Log.d("CategoryManager", "Fetched ${categories.size} categories")

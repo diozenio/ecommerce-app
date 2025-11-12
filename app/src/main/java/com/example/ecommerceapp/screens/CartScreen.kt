@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.ecommerceapp.data.cart.CartManager
 import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.ui.components.UIButton
@@ -35,7 +36,7 @@ import com.example.ecommerceapp.util.toCurrencyString
 import kotlinx.coroutines.launch
 
 @Composable
-fun CartScreen() {
+fun CartScreen(navController: NavHostController) {
     val context = LocalContext.current
     val dao = remember { DatabaseHelper.getInstance(context).cartDao() }
     val manager = remember { CartManager(dao) }
@@ -46,14 +47,14 @@ fun CartScreen() {
     }
 
     if (manager.items.isEmpty()) {
-        EmptyCart()
+        EmptyCart(navController)
     } else {
         FilledCart(manager)
     }
 }
 
 @Composable
-fun EmptyCart() {
+fun EmptyCart(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +62,9 @@ fun EmptyCart() {
         UINavHeader(
             title = "My Cart",
             onBackPressed = { Log.d("UINavHeader", "Mensagem de onBackPressed") },
-            onNotificationPressed = { Log.d("UINavHeader", "Mensagem de onNotificationPressed") }
+            onNotificationPressed = {
+                navController.navigate("notification")
+            }
         )
 
         UIEmptyState(

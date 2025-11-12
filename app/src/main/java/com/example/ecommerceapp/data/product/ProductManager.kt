@@ -8,14 +8,13 @@ import com.example.ecommerceapp.data.core.RetrofitClient
 import com.example.ecommerceapp.model.Product
 
 class ProductManager {
-    var loadingState by mutableStateOf(false)
+    var loadingState by mutableStateOf(true)
         private set
     var products by mutableStateOf<List<Product>>(emptyList())
         private set
 
     suspend fun getProducts() {
         try {
-            loadingState = true
             products = RetrofitClient.productApi.getProducts()
             Log.d("ProductManager", "Fetched ${products.size} products")
         } catch (e: Exception) {

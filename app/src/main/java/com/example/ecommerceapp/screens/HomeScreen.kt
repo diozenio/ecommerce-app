@@ -13,40 +13,54 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.ecommerceapp.data.cart.CartManager
-import com.example.ecommerceapp.data.core.DatabaseHelper
+import androidx.navigation.NavHostController
+import com.example.ecommerceapp.data.product.ProductManager
+import com.example.ecommerceapp.data.product.category.CategoryManager
 import com.example.ecommerceapp.ui.components.UIButton
+import com.example.ecommerceapp.ui.components.UIEmptyState
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
 import com.example.ecommerceapp.ui.components.UIInput
 import com.example.ecommerceapp.ui.components.UIProductCard
 import com.example.ecommerceapp.ui.components.UISelector
+import com.example.ecommerceapp.ui.components.UISkeletonCategory
+import com.example.ecommerceapp.ui.components.UISkeletonProductCard
 import com.example.ecommerceapp.ui.components.UIText
 import com.example.ecommerceapp.ui.components.UITextVariant
 import com.example.ecommerceapp.ui.components.UITextWeight
 import com.example.ecommerceapp.ui.theme.Colors
 
 @Composable
-fun HomeScreen() {
-    val dao = DatabaseHelper.getInstance(context = LocalContext.current).cartDao()
-    val manager = CartManager(dao)
-    val products = manager.items
+fun HomeScreen(navController: NavHostController) {
+    val productManager = remember { ProductManager() }
+    val categoryManager = remember { CategoryManager() }
 
     var text by remember {
         mutableStateOf("")
     }
 
-    val categories = listOf("All", "Tshirts", "Jeans", "Shoes")
+    var selectedCategory by remember { mutableStateOf(categoryManager.categories.first()) }
 
-    var selectedCategory by remember { mutableStateOf(categories.first()) }
+    LaunchedEffect(Unit) {
+        categoryManager.getCategories()
+    }
+
+    LaunchedEffect(Unit) {
+        productManager.getProducts()
+    }
+
+    val filteredProducts = productManager.products.filter { product ->
+        (selectedCategory.title == "All" || product.category == selectedCategory) &&
+                (text.isBlank() || product.title.contains(text, ignoreCase = true))
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -54,7 +68,7 @@ fun HomeScreen() {
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        HomeHeader()
+        HomeHeader(navController)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -78,38 +92,70 @@ fun HomeScreen() {
                 fullWidth = false,
             )
         }
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            items(categories) { category ->
-                UISelector(
-                    text = category,
-                    isSelected = category == selectedCategory,
-                    onClick = { selectedCategory = category }
-                )
+        if (categoryManager.loadingState) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(6) {
+                    UISkeletonCategory()
+                }
             }
-        }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            items(products, { it.id }) { product ->
-                UIProductCard(
-                    product = product.product,
-                    onUnsaveClick = {},
-                )
+        } else if (categoryManager.categories.size > 1) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                items(categoryManager.categories) { category ->
+                    UISelector(
+                        text = category.title,
+                        isSelected = category == selectedCategory,
+                        onClick = { selectedCategory = category }
+                    )
+                }
             }
         }
 
+        if (productManager.loadingState) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(6) {
+                    UISkeletonProductCard()
+                }
+            }
+        } else if (productManager.products.isNotEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(filteredProducts, { it.id }) { product ->
+                    UIProductCard(
+                        product = product,
+                        onUnsaveClick = {},
+                    )
+                }
+            }
+        } else {
+            UIEmptyState(
+                icon = UIIconName.CancelCircle,
+                title = "Something went wrong loading your products!",
+                description = "We couldn't find any product. Please refresh the page or try again later."
+            )
+        }
     }
+
 }
 
+
 @Composable
-fun HomeHeader() {
+fun HomeHeader(navController: NavHostController) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -121,7 +167,9 @@ fun HomeHeader() {
             weight = UITextWeight.SemiBold
         )
         UIIcon(
-            icon = UIIconName.Bell, modifier = Modifier.clickable { }
+            icon = UIIconName.Bell, modifier = Modifier.clickable {
+                navController.navigate("notification")
+            }
         )
     }
 }
