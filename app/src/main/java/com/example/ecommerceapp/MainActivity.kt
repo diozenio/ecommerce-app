@@ -12,15 +12,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerceapp.data.AppContainer
 import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.model.BottomNavBarItem
 import com.example.ecommerceapp.screens.auth.LoginScreen
@@ -47,9 +51,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             EcommerceAppTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
+
+                    val factory = AppContainer.provideMainViewModelFactory(LocalContext.current)
+                    val mainViewModel: MainViewModel = viewModel(factory = factory)
+                    val activeSession by mainViewModel.activeSession.collectAsState()
+
                     val navController = rememberNavController()
 
-                    if (AuthManager.isAuthenticated) {
+                    if (activeSession != null) {
                         MainApp(navController = navController)
                     } else {
                         AuthNavigation(navController = navController)
@@ -75,17 +84,21 @@ class MainActivity : ComponentActivity() {
             composable("signup") {
                 SignUpScreen(
                     onSubmit = {
-                        AuthManager.login()
+                        navController.navigate("login") {
+                            popUpTo("signup") { inclusive = true }
+                        }
                     },
                     onNavigateToLogin = {
                         navController.navigate("login")
+                    },
+                    onNavigateToTerms = {
+                        navController.navigate("terms")
                     }
                 )
             }
             composable("login") {
                 LoginScreen(
                     onSubmit = {
-                        AuthManager.login()
                     },
                     onNavigateToSignUp = {
                         navController.navigate("signup")

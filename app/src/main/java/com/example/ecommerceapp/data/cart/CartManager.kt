@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.BaseManager
-import com.example.ecommerceapp.data.core.RetrofitClient
 import com.example.ecommerceapp.model.CartItem
 import com.example.ecommerceapp.model.CartTaxes
 import com.example.ecommerceapp.util.toCurrencyString
@@ -62,7 +62,7 @@ class CartManager(
     suspend fun findAllTaxes() {
         isLoadingTaxes = true
         taxes = try {
-            RetrofitClient.cartApi.findAllTaxes()
+            APIService.cartApi.findAllTaxes()
         } catch (e: Exception) {
             Log.e("CartManager", "Error fetching taxes", e)
             null

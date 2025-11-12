@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.example.ecommerceapp.data.core.RetrofitClient
+import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.model.Product
 
 class ProductManager {
@@ -15,7 +15,7 @@ class ProductManager {
 
     suspend fun getProducts() {
         try {
-            products = RetrofitClient.productApi.getProducts()
+            products = APIService.productApi.getProducts()
             Log.d("ProductManager", "Fetched ${products.size} products")
         } catch (e: Exception) {
             e.printStackTrace()
