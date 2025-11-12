@@ -7,39 +7,50 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.ecommerceapp.data.auth.UserSessionDao
 import com.example.ecommerceapp.data.cart.CartDao
+import com.example.ecommerceapp.data.notification.NotificationConverter
+import com.example.ecommerceapp.data.notification.NotificationDao
 import com.example.ecommerceapp.data.product.ProductConverter
 import com.example.ecommerceapp.model.CartItem
+import com.example.ecommerceapp.model.Notification
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import com.example.ecommerceapp.model.UserSession
 
-@Database(
-    version = 1,
-    entities = [
-        CartItem::class,
-        UserSession::class
-    ]
-)
-@TypeConverters(ProductConverter::class)
-abstract class DatabaseHelper : RoomDatabase() {
 
+@Database(
+    version = 3,
+    entities = [CartItem::class, Notification::class, UserSession::class]
+)
+@TypeConverters(ProductConverter::class, NotificationConverter::class)
+
+abstract class DatabaseHelper : RoomDatabase() {
     abstract fun cartDao(): CartDao
     abstract fun userSessionDao(): UserSessionDao
+    abstract fun notificationDao(): NotificationDao
 
     companion object {
         @Volatile
-        private var INSTANCE: DatabaseHelper? = null
+        var INSTANCE: DatabaseHelper? = null
+
+        private val applicationScope = CoroutineScope(SupervisorJob())
 
         fun getInstance(context: Context): DatabaseHelper {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                val newInstance = Room.databaseBuilder(
                     context,
                     DatabaseHelper::class.java,
                     "ecommerce.db"
                 )
                     .fallbackToDestructiveMigration()
+                    .addCallback(
+                        AppDatabaseCallback(
+                            applicationScope
+                        )
+                    )
                     .build()
 
-                INSTANCE = instance
-                instance
+                INSTANCE = newInstance
+                newInstance
             }
         }
     }

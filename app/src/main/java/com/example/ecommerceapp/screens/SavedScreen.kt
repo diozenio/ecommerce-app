@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.ecommerceapp.model.SavedViewModel
 import com.example.ecommerceapp.ui.components.UIEmptyState
 import com.example.ecommerceapp.ui.components.UIIconName
@@ -25,7 +26,7 @@ import com.example.ecommerceapp.ui.components.UIProductCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
+fun SavedScreen(navController: NavHostController, viewModel: SavedViewModel = viewModel()) {
     val hasSavedItems by viewModel.hasSavedItems.collectAsState()
     val savedItems by viewModel.savedItems.collectAsState()
 
@@ -35,7 +36,9 @@ fun SavedScreen(viewModel: SavedViewModel = viewModel()) {
             UINavHeader(
                 title = "Saved Items",
                 onBackPressed = { /*TODO*/ },
-                onNotificationPressed = { /*TODO*/ }
+                onNotificationPressed = {
+                    navController.navigate("notification")
+                }
             )
         }
     ) { paddingValues ->

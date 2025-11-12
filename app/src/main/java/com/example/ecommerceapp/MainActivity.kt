@@ -30,6 +30,7 @@ import com.example.ecommerceapp.model.BottomNavBarItem
 import com.example.ecommerceapp.screens.auth.LoginScreen
 import com.example.ecommerceapp.screens.auth.SignUpScreen
 import com.example.ecommerceapp.screens.auth.WelcomeScreen
+import com.example.ecommerceapp.screens.notification.NotificationScreen
 import com.example.ecommerceapp.ui.components.UIBottomNavBar
 import com.example.ecommerceapp.ui.theme.Colors
 import com.example.ecommerceapp.ui.theme.EcommerceAppTheme
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     if (activeSession != null) {
-                        MainApp()
+                        MainApp(navController = navController)
                     } else {
                         AuthNavigation(navController = navController)
                     }
@@ -108,34 +109,45 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MainApp() {
-        var selectedItem by remember {
-            val item = bottomNavBarItems.first()
-            mutableStateOf(item)
-        }
-
-        val pageState = rememberPagerState {
-            bottomNavBarItems.size
-        }
-
-        LaunchedEffect(selectedItem) {
-            val currentIndex = bottomNavBarItems.indexOf(selectedItem)
-            pageState.animateScrollToPage(currentIndex)
-        }
-
-        LaunchedEffect(pageState.targetPage) {
-            selectedItem = bottomNavBarItems[pageState.targetPage]
-        }
-
-        EcommerceApp(
-            selectedItem = selectedItem,
-            onBottomNavBarItemChange = { item ->
-                selectedItem = item
-            }
+    fun MainApp(navController: NavHostController) {
+        NavHost(
+            navController = navController,
+            startDestination = "home"
         ) {
-            HorizontalPager(pageState) { page ->
-                val item = bottomNavBarItems[page]
-                item.screen()
+            composable("home") {
+                var selectedItem by remember {
+                    val item = bottomNavBarItems.first()
+                    mutableStateOf(item)
+                }
+
+                val pageState = rememberPagerState {
+                    bottomNavBarItems.size
+                }
+
+                LaunchedEffect(selectedItem) {
+                    val currentIndex = bottomNavBarItems.indexOf(selectedItem)
+                    pageState.animateScrollToPage(currentIndex)
+                }
+
+                LaunchedEffect(pageState.targetPage) {
+                    selectedItem = bottomNavBarItems[pageState.targetPage]
+                }
+
+                EcommerceApp(
+                    selectedItem = selectedItem,
+                    onBottomNavBarItemChange = { item ->
+                        selectedItem = item
+                    }
+                ) {
+                    HorizontalPager(pageState) { page ->
+                        val item = bottomNavBarItems[page]
+                        item.screen(navController)
+                    }
+                }
+            }
+
+            composable("notification") {
+                NotificationScreen(navController)
             }
         }
     }

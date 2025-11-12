@@ -14,18 +14,13 @@ import com.example.ecommerceapp.ui.theme.Colors
 
 @Composable
 fun UINavHeader(
-    title: String,
-    onBackPressed: () -> Unit,
-    onNotificationPressed: () -> Unit
+    title: String, onBackPressed: () -> Unit = {}, onNotificationPressed: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 12.dp,
-                bottom = 20.dp,
-                start = 24.dp,
-                end = 24.dp
+                top = 12.dp, bottom = 20.dp, start = 24.dp, end = 24.dp
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -44,9 +39,5 @@ fun UINavHeader(
 @Preview(showBackground = true, name = "Nav Header Preview")
 @Composable
 fun UINavHeaderPreview() {
-    UINavHeader(
-        title = "Meu Perfil",
-        onBackPressed = {},
-        onNotificationPressed = {}
-    )
+    UINavHeader(title = "Meu Perfil", onBackPressed = {}, onNotificationPressed = {})
 }

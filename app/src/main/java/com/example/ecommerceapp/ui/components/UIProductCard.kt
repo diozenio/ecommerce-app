@@ -1,6 +1,7 @@
 package com.example.ecommerceapp.ui.components
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -116,5 +118,45 @@ fun UIProductCardPreview() {
             onUnsaveClick = { /* Ação de desmarcar */ },
             modifier = Modifier.width(180.dp)
         )
+    }
+}
+
+@Composable
+fun UISkeletonProductCard() {
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White)
+            .fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(3f / 4f)
+                .clip(RoundedCornerShape(size = 16.dp))
+                .background(Colors.Primary100)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Colors.Primary100)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(Colors.Primary100)
+            )
+        }
     }
 }
