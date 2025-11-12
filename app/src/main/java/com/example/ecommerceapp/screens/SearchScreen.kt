@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
 import com.example.ecommerceapp.ui.components.UIText
@@ -16,7 +17,7 @@ import com.example.ecommerceapp.ui.components.UITextWeight
 import com.example.ecommerceapp.ui.theme.Colors
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
