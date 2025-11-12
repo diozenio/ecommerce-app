@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ecommerceapp.MainViewModel
 import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.data.auth.UserSessionDao
-import com.example.ecommerceapp.data.core.ApiService
+import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.screens.auth.LoginViewModel
 import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
@@ -30,7 +30,7 @@ object AppContainer {
     fun getAuthManager(context: Context): AuthManager {
         return authManager ?: synchronized(this) {
             authManager ?: AuthManager(
-                authService = ApiService.authService,
+                authService = APIService.authService,
                 userSessionDao = getUserSessionDao(context)
             ).also {
                 authManager = it
