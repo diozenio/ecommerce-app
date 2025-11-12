@@ -21,9 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.ecommerceapp.data.AppContainer
 import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.model.BottomNavBarItem
@@ -34,6 +36,8 @@ import com.example.ecommerceapp.screens.notification.NotificationScreen
 import com.example.ecommerceapp.ui.components.UIBottomNavBar
 import com.example.ecommerceapp.ui.theme.Colors
 import com.example.ecommerceapp.ui.theme.EcommerceAppTheme
+import com.example.ecommerceapp.screens.MyOrdersScreen
+import com.example.ecommerceapp.screens.OrderDeliveryScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -148,6 +152,20 @@ class MainActivity : ComponentActivity() {
 
             composable("notification") {
                 NotificationScreen(navController)
+            }
+
+            composable("my_orders") {
+                MyOrdersScreen(navController)
+            }
+
+            composable ("order_delivery_screen/{orderId}", arguments = listOf(navArgument("orderId") {
+                type = NavType.StringType
+            })) {
+                backStackEntry ->
+                val orderId = backStackEntry.arguments?.getString("orderId")
+                if (orderId != null) {
+                    OrderDeliveryScreen(navController, orderId)
+                }
             }
         }
     }

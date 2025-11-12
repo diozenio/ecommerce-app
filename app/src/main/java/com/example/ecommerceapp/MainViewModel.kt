@@ -7,9 +7,10 @@ import com.example.ecommerceapp.model.UserSession
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class MainViewModel(
-    authManager: AuthManager
+    private val authManager: AuthManager
 ) : ViewModel() {
     val activeSession: StateFlow<UserSession?> = authManager.getActiveSession()
         .stateIn(
@@ -17,4 +18,10 @@ class MainViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = null
         )
+
+    fun logout() {
+        viewModelScope.launch {
+            authManager.logout()
+        }
+    }
 }
