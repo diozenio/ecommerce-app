@@ -26,7 +26,7 @@ import com.example.ecommerceapp.model.UserSession
 
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [CartItem::class, Notification::class, UserSession::class, OrderReview::class, Product::class, Category::class, Order::class],
     exportSchema = false
 )
