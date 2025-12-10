@@ -30,6 +30,8 @@ object AppContainer {
         return getDatabase(context).userSessionDao()
     }
 
+    private fun getSavedDao(context: Context) = getDatabase(context).savedDao()
+
     fun getAuthManager(context: Context): AuthManager {
         return authManager ?: synchronized(this) {
             authManager ?: AuthManager(
@@ -41,10 +43,11 @@ object AppContainer {
         }
     }
 
-    fun getSavedRepository(): SavedRepository {
+    fun getSavedRepository(context: Context): SavedRepository {
         return savedRepository ?: synchronized(this) {
             savedRepository ?: SavedRepository(
-                savedApi = APIService.savedApi
+                savedApi = APIService.savedApi,
+                savedDao = getSavedDao(context)
             ).also {
                 savedRepository = it
             }
@@ -53,7 +56,7 @@ object AppContainer {
 
     fun provideSavedViewModelFactory(context: Context): SavedViewModelFactory {
         return SavedViewModelFactory(
-            repository = getSavedRepository()
+            repository = getSavedRepository(context)
         )
     }
 
@@ -68,7 +71,6 @@ object AppContainer {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
-
 
     fun provideSignUpViewModelFactory(context: Context): SignUpViewModelFactory {
         return SignUpViewModelFactory(

@@ -1,25 +1,32 @@
 package com.example.ecommerceapp.data.repository
 
 import com.example.ecommerceapp.data.saved.SavedApi
+import com.example.ecommerceapp.data.saved.SavedDao
 import com.example.ecommerceapp.model.Product
 import com.example.ecommerceapp.model.SavedItem
 
 class SavedRepository(
-    private val savedApi: SavedApi
+    private val savedApi: SavedApi,
+    private val savedDao: SavedDao
 ) {
 
     suspend fun getSavedItems(): List<SavedItem> {
         return try {
-            val result = savedApi.getSavedItems()
-            result
+            val remoteItems = savedApi.getSavedItems()
+            savedDao.deleteAll()
+            savedDao.insertAll(remoteItems)
+
+            remoteItems
         } catch (e: Exception) {
-            emptyList()
+            e.printStackTrace()
+            savedDao.findAll()
         }
     }
 
     suspend fun saveItem(product: Product) {
         try {
-            savedApi.saveItem(product)
+            val savedItem = savedApi.saveItem(product)
+            savedDao.insertOne(savedItem)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -28,6 +35,12 @@ class SavedRepository(
     suspend fun unsaveItem(product: Product) {
         try {
             savedApi.unsaveItem(product.id)
+            val localItems = savedDao.findAll()
+            val itemToDelete = localItems.find { it.product.id == product.id }
+
+            if (itemToDelete != null) {
+                savedDao.deleteOne(itemToDelete)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
