@@ -12,22 +12,13 @@ class OrderManager(
         return try {
             val orders = orderApi.findAll()
             
-            val orderIds: List<Int> = orders.map { it.id }
-            val reviews = reviewManager.getReviewsForOrders(orderIds)
+          val reviews = reviewManager.getReviewsForOrders(orderIds)
             
             val reviewsMap: Map<Int, com.example.ecommerceapp.model.OrderReview> =
                 reviews.associateBy { it.orderId }
             
-            val ordersWithReviews = orders.map { order ->
-                val review = reviewsMap[order.id]
-                if (review != null) {
-                    order.copy(rating = review.rating)
-                } else {
-                    order
-                }
-            }
             
-            Result.success(ordersWithReviews)
+            Result.success(orders)
         } catch (e: Exception) {
             Result.failure(e)
         }
