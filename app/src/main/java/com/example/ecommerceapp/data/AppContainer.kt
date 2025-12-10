@@ -8,12 +8,15 @@ import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.data.auth.UserSessionDao
 import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
+import com.example.ecommerceapp.data.repository.SavedRepository
+import com.example.ecommerceapp.model.SavedViewModel
 import com.example.ecommerceapp.screens.auth.LoginViewModel
 import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
 
 object AppContainer {
     private var database: DatabaseHelper? = null
     private var authManager: AuthManager? = null
+    private var savedRepository: SavedRepository? = null
 
     private fun getDatabase(context: Context): DatabaseHelper {
         return database ?: synchronized(this) {
@@ -37,6 +40,35 @@ object AppContainer {
             }
         }
     }
+
+    fun getSavedRepository(): SavedRepository {
+        return savedRepository ?: synchronized(this) {
+            savedRepository ?: SavedRepository(
+                savedApi = APIService.savedApi
+            ).also {
+                savedRepository = it
+            }
+        }
+    }
+
+    fun provideSavedViewModelFactory(context: Context): SavedViewModelFactory {
+        return SavedViewModelFactory(
+            repository = getSavedRepository()
+        )
+    }
+
+    class SavedViewModelFactory(
+        private val repository: SavedRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(SavedViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return SavedViewModel(repository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+
 
     fun provideSignUpViewModelFactory(context: Context): SignUpViewModelFactory {
         return SignUpViewModelFactory(
