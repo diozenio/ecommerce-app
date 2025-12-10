@@ -63,4 +63,6 @@ class AuthRepository(
     suspend fun logout() {
         userSessionDao.deleteSession()
     }
+
+    companion object
 }
