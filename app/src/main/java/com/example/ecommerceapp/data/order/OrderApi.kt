@@ -10,6 +10,6 @@ interface OrderApi {
     suspend fun findAll(): List<Order>
     
     @GET("orders/{id}/track")
-    suspend fun getTracking(@Path("id") orderId: String): OrderDelivery
+    suspend fun getTracking(@Path("id") orderId: Int): OrderDelivery
 }
 

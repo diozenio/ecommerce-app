@@ -1,5 +1,9 @@
 package com.example.ecommerceapp.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.ecommerceapp.model.Model
+
 enum class OrderStatus {
     PACKING,
     PICKED,
@@ -7,13 +11,14 @@ enum class OrderStatus {
     DELIVERED
 }
 
+@Entity(tableName = "orders")
 data class Order(
-    val id: String,
+    @PrimaryKey(autoGenerate = false)
+    override val id: Int = 0,
     val title: String,
     val size: ProductSize,
     val price: Float,
     val imageUrl: String,
     val status: OrderStatus,
-    val rating: Float? = null // Avaliação de 0.0 a 5.0, null se ainda não avaliado
-)
-
+    val rating: Float? = null
+): Model

@@ -1,22 +1,21 @@
-package com.example.ecommerceapp.data.order
+package com.example.ecommerceapp.data.repository
 
-import com.example.ecommerceapp.data.review.ReviewManager
+import com.example.ecommerceapp.data.order.OrderApi
 import com.example.ecommerceapp.model.Order
 
-class OrderManager(
+class OrderRepository(
     private val orderApi: OrderApi,
-    private val reviewManager: ReviewManager
+    private val reviewRepository: ReviewRepository
 ) {
-    
+
     suspend fun loadOrders(): Result<List<Order>> {
         return try {
             val orders = orderApi.findAll()
-            
-            val orderIds = orders.map { it.id }
-            val reviews = reviewManager.getReviewsForOrders(orderIds)
-            
+
+            val orderIds: List<Int> = orders.map { it.id }
+            val reviews = reviewRepository.getReviewsForOrders(orderIds)
             val reviewsMap = reviews.associateBy { it.orderId }
-            
+
             val ordersWithReviews = orders.map { order ->
                 val review = reviewsMap[order.id]
                 if (review != null) {
@@ -25,11 +24,12 @@ class OrderManager(
                     order
                 }
             }
-            
+
             Result.success(ordersWithReviews)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 }
+
 

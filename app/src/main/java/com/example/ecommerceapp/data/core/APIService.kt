@@ -34,4 +34,7 @@ object APIService {
     val notificationApi: RemoteNotificationApiDataSource = client.create(
         RemoteNotificationApiDataSource::class.java
     )
+    val orderApi: OrderApi = client.create(
+        OrderApi::class.java
+    )
 }

@@ -15,9 +15,9 @@ import com.example.ecommerceapp.screens.auth.SignUpViewModel
 
 object AppContainer {
     private var database: DatabaseHelper? = null
+    private var reviewRepository: ReviewRepository? = null
+    private var orderRepository: OrderRepository? = null
     private var authManager: AuthRepository? = null
-    private var reviewManager: ReviewManager? = null
-    private var orderManager: OrderManager? = null
 
 
     private fun getDatabase(context: Context): DatabaseHelper {
@@ -43,23 +43,23 @@ object AppContainer {
         }
     }
 
-    fun getReviewManager(context: Context): ReviewManager {
-        return reviewManager ?: synchronized(this) {
-            reviewManager ?: ReviewManager(
-                reviewDao = getDatabase(context).reviewDao()
+    fun getReviewRepository(context: Context): ReviewRepository {
+        return reviewRepository ?: synchronized(this) {
+            reviewRepository ?: ReviewRepository(
+                localDataSource = RoomLocalReviewDataSource(getDatabase(context).reviewDao())
             ).also {
-                reviewManager = it
+                reviewRepository = it
             }
         }
     }
 
-    fun getOrderManager(context: Context): OrderManager {
-        return orderManager ?: synchronized(this) {
-            orderManager ?: OrderManager(
+    fun getOrderRepository(context: Context): OrderRepository {
+        return orderRepository ?: synchronized(this) {
+            orderRepository ?: OrderRepository(
                 orderApi = APIService.orderApi,
-                reviewManager = getReviewManager(context)
+                reviewRepository = getReviewRepository(context)
             ).also {
-                orderManager = it
+                orderRepository = it
             }
         }
     }
