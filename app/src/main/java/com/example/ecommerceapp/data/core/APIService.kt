@@ -5,12 +5,21 @@ import com.example.ecommerceapp.data.cart.RemoteCartApiDataSource
 import com.example.ecommerceapp.data.order.OrderApi
 import com.example.ecommerceapp.data.product.ProductApi
 import com.example.ecommerceapp.data.product.category.CategoryApi
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object APIService {
+    private val okHttpClient = OkHttpClient.Builder()
+        .connectTimeout(2, TimeUnit.SECONDS)
+        .readTimeout(2, TimeUnit.SECONDS)
+        .writeTimeout(2, TimeUnit.SECONDS)
+        .build()
+
     private val client: Retrofit = Retrofit.Builder()
         .baseUrl("http://10.0.2.2:3000/")
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
