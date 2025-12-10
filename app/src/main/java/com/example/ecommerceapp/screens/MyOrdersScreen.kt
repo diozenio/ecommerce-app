@@ -21,17 +21,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectAsState
 import androidx.navigation.NavHostController
 import com.example.ecommerceapp.data.AppContainer
 import com.example.ecommerceapp.model.Order
 import com.example.ecommerceapp.model.OrderStatus
+import com.example.ecommerceapp.screens.orders.MyOrdersViewModel
+import com.example.ecommerceapp.screens.orders.MyOrdersViewModelFactory
+import com.example.ecommerceapp.screens.orders.OrdersUiState
 import com.example.ecommerceapp.ui.components.UIEmptyState
 import com.example.ecommerceapp.ui.components.UINavHeader
 import com.example.ecommerceapp.ui.components.UIOrderCard
@@ -51,39 +54,24 @@ enum class OrderTab {
     COMPLETED
 }
 
-sealed interface OrdersUiState {
-    data object Loading : OrdersUiState
-    data class Success(val orders: List<Order>) : OrdersUiState
-    data class Error(val message: String) : OrdersUiState
-}
-
 @Composable
 fun MyOrdersScreen(
     navController: NavHostController
 ) {
     val context = LocalContext.current
-    val reviewManager = remember { AppContainer.getReviewManager(context) }
-    val orderManager = remember { AppContainer.getOrderManager(context) }
+
+    val factory = MyOrdersViewModelFactory(
+        orderManager = AppContainer.getOrderManager(context),
+        reviewManager = AppContainer.getReviewManager(context)
+    )
+    val viewModel: MyOrdersViewModel = viewModel(factory = factory)
+    val uiState by viewModel.uiState.collectAsState()
 
     var selectedTab by remember { mutableStateOf(OrderTab.ONGOING) }
-    var uiState by remember { mutableStateOf<OrdersUiState>(OrdersUiState.Loading) }
     var orderToReview by remember { mutableStateOf<Order?>(null) }
-    val scope = rememberCoroutineScope()
-
-    fun loadOrders() {
-        scope.launch {
-            uiState = OrdersUiState.Loading
-            val result = orderManager.loadOrders()
-            uiState = if (result.isSuccess) {
-                OrdersUiState.Success(result.getOrNull() ?: emptyList())
-            } else {
-                OrdersUiState.Error("Não foi possível conectar com nossos servidores")
-            }
-        }
-    }
 
     LaunchedEffect(Unit) {
-        loadOrders()
+        viewModel.loadOrders()
     }
 
     val filteredOrders = when (val state = uiState) {
@@ -145,7 +133,7 @@ fun MyOrdersScreen(
 
                     is OrdersUiState.Error -> ErrorState(
                         message = (uiState as OrdersUiState.Error).message,
-                        onRetry = { loadOrders() },
+                        onRetry = { viewModel.loadOrders() },
                         modifier = Modifier.padding(6.dp)
                     )
 
@@ -168,20 +156,8 @@ fun MyOrdersScreen(
                         orderTitle = order.title,
                         onDismiss = { orderToReview = null },
                         onSubmit = { rating, reviewText ->
-                            scope.launch {
-                                reviewManager.saveReview(order.id, rating, reviewText)
-
-                                if (uiState is OrdersUiState.Success) {
-                                    val currentOrders = (uiState as OrdersUiState.Success).orders
-                                    uiState = OrdersUiState.Success(
-                                        currentOrders.map {
-                                            if (it.id == order.id) it.copy(rating = rating) else it
-                                        }
-                                    )
-                                }
-
-                                orderToReview = null
-                            }
+                            viewModel.submitReview(order, rating, reviewText)
+                            orderToReview = null
                         }
                     )
                 }
