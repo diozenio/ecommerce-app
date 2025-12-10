@@ -18,7 +18,7 @@ import com.example.ecommerceapp.model.UserSession
 
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [CartItem::class, Notification::class, UserSession::class]
 )
 @TypeConverters(ProductConverter::class, NotificationConverter::class)
@@ -32,8 +32,6 @@ abstract class DatabaseHelper : RoomDatabase() {
         @Volatile
         var INSTANCE: DatabaseHelper? = null
 
-        private val applicationScope = CoroutineScope(SupervisorJob())
-
         fun getInstance(context: Context): DatabaseHelper {
             return INSTANCE ?: synchronized(this) {
                 val newInstance = Room.databaseBuilder(
@@ -42,11 +40,6 @@ abstract class DatabaseHelper : RoomDatabase() {
                     "ecommerce.db"
                 )
                     .fallbackToDestructiveMigration()
-                    .addCallback(
-                        AppDatabaseCallback(
-                            applicationScope
-                        )
-                    )
                     .build()
 
                 INSTANCE = newInstance
