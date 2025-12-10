@@ -12,10 +12,10 @@ enum class NotificationCategory(val key: String) {
 
 @Entity(tableName = "notification")
 data class Notification(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     override val id: Int = 0,
     val title: String,
     val subtitle: String,
     val category: NotificationCategory,
-    val date: Date
+    val date: Long
 ) : Model

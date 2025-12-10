@@ -10,9 +10,9 @@ import com.example.ecommerceapp.data.cart.CartRepository
 import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.screens.AccountScreen
-import com.example.ecommerceapp.screens.HomeScreen
 import com.example.ecommerceapp.screens.SavedScreen
 import com.example.ecommerceapp.screens.SearchScreen
+import com.example.ecommerceapp.screens.home.HomeScreen
 import com.example.ecommerceapp.ui.components.UIIconName
 import com.example.ecommerceapp.ui.screens.CartScreen
 import com.example.ecommerceapp.ui.viewModel.CartViewModel
