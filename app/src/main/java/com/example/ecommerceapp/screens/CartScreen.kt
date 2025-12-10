@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.ecommerceapp.data.AppContainer
 import com.example.ecommerceapp.data.cart.CartManager
-import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.ui.components.UIButton
 import com.example.ecommerceapp.ui.components.UIEmptyState
 import com.example.ecommerceapp.ui.components.UIIcon
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CartScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val dao = remember { DatabaseHelper.getInstance(context).cartDao() }
+    val dao = remember { AppContainer.getCartDao(context) }
     val manager = remember { CartManager(dao) }
 
     LaunchedEffect(Unit) {
@@ -219,4 +219,3 @@ fun FilledCart(manager: CartManager) {
         )
     }
 }
-

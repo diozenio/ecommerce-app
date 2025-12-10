@@ -17,6 +17,7 @@ import com.example.ecommerceapp.model.Notification
 import com.example.ecommerceapp.model.Product
 import com.example.ecommerceapp.model.SavedItem
 import com.example.ecommerceapp.model.UserSession
+import kotlinx.coroutines.CoroutineScope
 
 @Database(
     entities = [
@@ -40,15 +41,17 @@ abstract class DatabaseHelper : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE: DatabaseHelper? = null
+        internal var INSTANCE: DatabaseHelper? = null
 
-        fun getInstance(context: Context): DatabaseHelper {
+        fun getInstance(context: Context, scope: CoroutineScope): DatabaseHelper {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     DatabaseHelper::class.java,
                     "ecommerce_db"
                 )
+                    .addCallback(AppDatabaseCallback(scope))
+                    .fallbackToDestructiveMigration(false)
                     .build()
                     .also { INSTANCE = it }
             }

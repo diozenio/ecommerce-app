@@ -6,21 +6,27 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ecommerceapp.MainViewModel
 import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.data.auth.UserSessionDao
+import com.example.ecommerceapp.data.cart.CartDao
 import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
+import com.example.ecommerceapp.data.notification.NotificationDao
 import com.example.ecommerceapp.data.repository.SavedRepository
 import com.example.ecommerceapp.model.SavedViewModel
 import com.example.ecommerceapp.screens.auth.LoginViewModel
 import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 object AppContainer {
     private var database: DatabaseHelper? = null
     private var authManager: AuthManager? = null
     private var savedRepository: SavedRepository? = null
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private fun getDatabase(context: Context): DatabaseHelper {
         return database ?: synchronized(this) {
-            database ?: DatabaseHelper.getInstance(context.applicationContext).also {
+            database ?: DatabaseHelper.getInstance(context.applicationContext, applicationScope).also {
                 database = it
             }
         }
@@ -28,6 +34,15 @@ object AppContainer {
 
     private fun getUserSessionDao(context: Context): UserSessionDao {
         return getDatabase(context).userSessionDao()
+    }
+
+
+    fun getCartDao(context: Context): CartDao {
+        return getDatabase(context).cartDao()
+    }
+
+    fun getNotificationDao(context: Context): NotificationDao {
+        return getDatabase(context).notificationDao()
     }
 
     private fun getSavedDao(context: Context) = getDatabase(context).savedDao()
@@ -53,6 +68,7 @@ object AppContainer {
             }
         }
     }
+
 
     fun provideSavedViewModelFactory(context: Context): SavedViewModelFactory {
         return SavedViewModelFactory(

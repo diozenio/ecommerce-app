@@ -16,7 +16,7 @@ interface SavedDao : BaseDao<SavedItem> {
     override suspend fun insertOne(item: SavedItem)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(items: List<SavedItem>)
+    override suspend fun insertAll(items: List<SavedItem>)
 
     @Update
     override suspend fun updateOne(item: SavedItem)
