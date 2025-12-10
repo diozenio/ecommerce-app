@@ -112,11 +112,16 @@ fun OrderDeliveryScreen(
     LaunchedEffect(orderId) {
         uiState = OrderDeliveryUiState.Loading
         
-        uiState = try {
-            val tracking = APIService.orderApi.getTracking(orderId)
-            OrderDeliveryUiState.Success(tracking)
-        } catch (e: Exception) {
-            OrderDeliveryUiState.Error("Não foi possível carregar os dados de rastreamento")
+        val parsedId = orderId.toIntOrNull()
+        uiState = if (parsedId == null) {
+            OrderDeliveryUiState.Error("ID do pedido inválido")
+        } else {
+            try {
+                val tracking = APIService.orderApi.getTracking(parsedId)
+                OrderDeliveryUiState.Success(tracking)
+            } catch (e: Exception) {
+                OrderDeliveryUiState.Error("Não foi possível carregar os dados de rastreamento")
+            }
         }
     }
 

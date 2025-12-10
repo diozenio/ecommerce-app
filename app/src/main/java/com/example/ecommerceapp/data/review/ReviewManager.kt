@@ -4,12 +4,12 @@ import com.example.ecommerceapp.model.OrderReview
 
 class ReviewManager(private val reviewDao: ReviewDao) {
     
-    suspend fun getReviewsForOrders(orderIds: List<String>): List<OrderReview> {
+    suspend fun getReviewsForOrders(orderIds: List<Int>): List<OrderReview> {
         if (orderIds.isEmpty()) return emptyList()
         return reviewDao.findByOrderIds(orderIds)
     }
     
-    suspend fun saveReview(orderId: String, rating: Float, reviewText: String) {
+    suspend fun saveReview(orderId: Int, rating: Float, reviewText: String) {
         val existing = reviewDao.findByOrderId(orderId)
         if (existing != null) {
             val updatedReview = existing.copy(

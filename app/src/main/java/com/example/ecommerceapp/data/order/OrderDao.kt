@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.ecommerceapp.model.Order
+import com.example.ecommerceapp.data.core.BaseDao
 
 @Dao
 interface OrderDao : BaseDao<Order> {

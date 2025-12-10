@@ -15,9 +15,9 @@ interface ReviewDao {
     suspend fun updateOne(item: OrderReview)
     
     @Query("SELECT * FROM order_reviews WHERE orderId = :orderId")
-    suspend fun findByOrderId(orderId: String): OrderReview?
+    suspend fun findByOrderId(orderId: Int): OrderReview?
     
     @Query("SELECT * FROM order_reviews WHERE orderId IN (:orderIds)")
-    suspend fun findByOrderIds(orderIds: List<String>): List<OrderReview>
+    suspend fun findByOrderIds(orderIds: List<Int>): List<OrderReview>
 }
 

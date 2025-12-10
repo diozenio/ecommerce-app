@@ -1,7 +1,7 @@
 package com.example.ecommerceapp.model
 
 data class OrderDelivery(
-    val orderId: String,
+    val orderId: Int,
     val currentLocation: LocationCoordinate,
     val destination: LocationCoordinate,
     val deliveryPerson: DeliveryPerson?,

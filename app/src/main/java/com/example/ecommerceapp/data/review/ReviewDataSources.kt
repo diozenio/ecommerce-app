@@ -3,8 +3,8 @@ package com.example.ecommerceapp.data.review
 import com.example.ecommerceapp.model.OrderReview
 
 interface LocalReviewDataSource {
-    suspend fun findByOrderIds(orderIds: List<String>): List<OrderReview>
-    suspend fun findByOrderId(orderId: String): OrderReview?
+    suspend fun findByOrderIds(orderIds: List<Int>): List<OrderReview>
+    suspend fun findByOrderId(orderId: Int): OrderReview?
     suspend fun upsert(review: OrderReview)
 }
 
@@ -12,11 +12,11 @@ class RoomLocalReviewDataSource(
     private val reviewDao: ReviewDao
 ) : LocalReviewDataSource {
 
-    override suspend fun findByOrderIds(orderIds: List<String>): List<OrderReview> {
+    override suspend fun findByOrderIds(orderIds: List<Int>): List<OrderReview> {
         return reviewDao.findByOrderIds(orderIds)
     }
 
-    override suspend fun findByOrderId(orderId: String): OrderReview? {
+    override suspend fun findByOrderId(orderId: Int): OrderReview? {
         return reviewDao.findByOrderId(orderId)
     }
 

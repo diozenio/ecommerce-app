@@ -12,7 +12,7 @@ class OrderManager(
         return try {
             val orders = orderApi.findAll()
             
-            val orderIds = orders.map { it.id }
+            val orderIds: List<Int> = orders.map { it.id }
             val reviews = reviewManager.getReviewsForOrders(orderIds)
             
             val reviewsMap = reviews.associateBy { it.orderId }

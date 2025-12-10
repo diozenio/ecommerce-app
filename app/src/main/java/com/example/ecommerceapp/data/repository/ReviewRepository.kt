@@ -7,12 +7,12 @@ class ReviewRepository(
     private val localDataSource: LocalReviewDataSource
 ) {
 
-    suspend fun getReviewsForOrders(orderIds: List<String>): List<OrderReview> {
+    suspend fun getReviewsForOrders(orderIds: List<Int>): List<OrderReview> {
         if (orderIds.isEmpty()) return emptyList()
         return localDataSource.findByOrderIds(orderIds)
     }
 
-    suspend fun saveReview(orderId: String, rating: Float, reviewText: String) {
+    suspend fun saveReview(orderId: Int, rating: Float, reviewText: String) {
         val existing = localDataSource.findByOrderId(orderId)
         val review = if (existing != null) {
             existing.copy(

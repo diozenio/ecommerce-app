@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 data class OrderReview(
     @PrimaryKey(autoGenerate = true)
     override val id: Int = 0,
-    val orderId: String,
+    val orderId: Int,
     val rating: Float,
     val reviewText: String,
     val timestamp: Long = System.currentTimeMillis()
