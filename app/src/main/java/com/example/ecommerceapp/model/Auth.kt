@@ -1,8 +1,4 @@
-package com.example.ecommerceapp.data.auth
-
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
+package com.example.ecommerceapp.model
 
 data class LoginRequest(
     val email: String,
@@ -26,12 +22,3 @@ data class UserApiResponse(
     val email: String,
     val password: String
 )
-
-
-interface AuthService {
-    @POST("signup")
-    suspend fun signup(@Body request: SignUpRequest): Response<AuthResponse>
-
-    @POST("login")
-    suspend fun login(@Body request: LoginRequest): Response<AuthResponse>
-}
