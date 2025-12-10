@@ -194,7 +194,7 @@ fun RatingBadge(rating: Float) {
 @Composable
 fun UIOrderCardPreview() {
     val sampleOrder = Order(
-        id = "1",
+        id = 1,
         title = "Regular Fit Slogan",
         size = ProductSize.MEDIUM,
         price = 1190f,
@@ -211,7 +211,7 @@ fun UIOrderCardPreview() {
 @Composable
 fun UICompletedOrderCardPreview() {
     val completedOrder = Order(
-        id = "6",
+        id = 6,
         title = "Regular Fit Polo",
         size = ProductSize.LARGE,
         price = 1100f,
