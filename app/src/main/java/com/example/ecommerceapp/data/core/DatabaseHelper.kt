@@ -10,7 +10,6 @@ import com.example.ecommerceapp.data.cart.CartDao
 import com.example.ecommerceapp.data.notification.NotificationConverter
 import com.example.ecommerceapp.data.notification.NotificationDao
 import com.example.ecommerceapp.data.product.ProductConverter
-import com.example.ecommerceapp.data.product.ProductDao
 import com.example.ecommerceapp.data.review.ReviewDao
 import com.example.ecommerceapp.data.saved.SavedDao
 import com.example.ecommerceapp.model.CartItem
@@ -37,7 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 abstract class DatabaseHelper : RoomDatabase() {
 
     abstract fun userSessionDao(): UserSessionDao
-    abstract fun productDao(): ProductDao
     abstract fun cartDao(): CartDao
     abstract fun notificationDao(): NotificationDao
     abstract fun savedDao(): SavedDao

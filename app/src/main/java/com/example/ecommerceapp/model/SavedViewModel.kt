@@ -42,11 +42,4 @@ class SavedViewModel(
             fetchSavedItems()
         }
     }
-
-    fun saveItem(product: Product) {
-        viewModelScope.launch {
-            repository.saveItem(product)
-            fetchSavedItems()
-        }
-    }
 }

@@ -29,7 +29,4 @@ interface SavedDao : BaseDao<SavedItem> {
 
     @Query("SELECT * FROM saved")
     override suspend fun findAll(): List<SavedItem>
-
-    @Query("SELECT * FROM saved WHERE id = :id")
-    suspend fun findById(id: Int): SavedItem?
 }
