@@ -1,0 +1,10 @@
+# Este arquivo deve ser copiado para local.properties e conter suas chaves reais
+# O arquivo local.properties NÃO deve ser commitado no git
+
+# SDK Location - Exemplo:
+# sdk.dir=C\:\\Users\\SeuUsuario\\AppData\\Local\\Android\\Sdk
+
+# Google Maps API Key
+# Obtenha sua chave em: https://console.cloud.google.com/
+MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY_HERE
+
