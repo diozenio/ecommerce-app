@@ -10,7 +10,7 @@ sealed class AccountNavItem(
     object MyOrdersItem : AccountNavItem(
         label = "My Orders",
         icon = UIIconName.Box,
-        route = "my_orders"	
+        route = "my_orders"
     )
 
     object MyDetailsItem : AccountNavItem(
