@@ -1,12 +1,5 @@
 package com.example.ecommerceapp.model
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import com.example.ecommerceapp.screens.AccountScreen
-import com.example.ecommerceapp.screens.CartScreen
-import com.example.ecommerceapp.screens.HomeScreen
-import com.example.ecommerceapp.screens.SavedScreen
-import com.example.ecommerceapp.screens.SearchScreen
 import com.example.ecommerceapp.ui.components.UIIconName
 
 sealed class AccountNavItem(
@@ -17,7 +10,7 @@ sealed class AccountNavItem(
     object MyOrdersItem : AccountNavItem(
         label = "My Orders",
         icon = UIIconName.Box,
-        route = "my_orders"	
+        route = "my_orders"
     )
 
     object MyDetailsItem : AccountNavItem(

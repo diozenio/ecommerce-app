@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import com.example.ecommerceapp.model.Model
 
 abstract class BaseManager<T : Model>(
-    protected val dao: BaseDao<T>
+    protected val dao: BaseLocalDataSource<T>
 ) {
     var items by mutableStateOf(emptyList<T>())
         protected set
