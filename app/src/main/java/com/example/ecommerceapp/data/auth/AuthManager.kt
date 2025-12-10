@@ -58,4 +58,6 @@ class AuthManager(
     suspend fun logout() {
         userSessionDao.deleteSession()
     }
+
+    companion object
 }
