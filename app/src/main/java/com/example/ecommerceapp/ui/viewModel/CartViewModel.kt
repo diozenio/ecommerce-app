@@ -23,14 +23,18 @@ class CartViewModel(
             currentState.copy(
                 onRemoveItem = { item -> removeItem(item) },
                 onIncrement = { id -> changeQuantity(id, 1) },
-                onDecrement = { id -> changeQuantity(id, -1) }
+                onDecrement = { id -> changeQuantity(id, -1) },
+                fetchData = { fetchData() }
             )
         }
-        fetchData()
     }
 
     private fun fetchData() {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoadingItems = true)
+            }
+
             val items = repository.getCartItems()
             val taxes = repository.getTaxes()
 

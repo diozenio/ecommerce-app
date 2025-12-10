@@ -8,8 +8,10 @@ data class CartScreenUIState(
     val vat: String = "",
     val shippingFee: String = "",
     val total: Float = 0f,
+    val isLoadingItems: Boolean = false,
 
     val onRemoveItem: (CartItem) -> Unit = {},
     val onIncrement: (Int) -> Unit = {},
-    val onDecrement: (Int) -> Unit = {}
+    val onDecrement: (Int) -> Unit = {},
+    val fetchData: () -> Unit = {},
 )

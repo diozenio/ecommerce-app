@@ -3,13 +3,16 @@ package com.example.ecommerceapp.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,10 +41,45 @@ fun CartScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(key1 = Unit) {
+        state.fetchData()
+    }
+
+    if (state.isLoadingItems && state.cartItems.isEmpty()) {
+        LoadingCart(navController)
+    }
+
     if (state.cartItems.isEmpty()) {
         EmptyCart(navController)
     } else {
         FilledCart(state, navController)
+    }
+}
+
+@Composable
+fun LoadingCart(navController: NavHostController) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        UINavHeader(
+            title = "My Cart",
+            onBackPressed = { navController.popBackStack() },
+            onNotificationPressed = { navController.navigate("notification") }
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 4.dp, start = 24.dp, end = 24.dp),
+        ) {
+            HorizontalDivider(thickness = 1.dp, color = Colors.Primary100)
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(color = Colors.Primary600)
+            }
+        }
     }
 }
 
@@ -60,6 +98,7 @@ fun EmptyCart(navController: NavHostController) {
         )
     }
 }
+
 
 @Composable
 fun FilledCart(state: CartScreenUIState, navController: NavHostController) {
