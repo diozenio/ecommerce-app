@@ -2,8 +2,9 @@ package com.example.ecommerceapp.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommerceapp.data.auth.AuthManager
+import com.example.ecommerceapp.data.repository.AuthRepository
 import com.example.ecommerceapp.data.auth.AuthResult
+import com.example.ecommerceapp.data.auth.RemoteAuthService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,7 +20,7 @@ data class LoginUiState(
 )
 
 class LoginViewModel(
-    private val authManager: AuthManager
+    private val authManager: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())

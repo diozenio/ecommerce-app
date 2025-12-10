@@ -1,16 +1,17 @@
 package com.example.ecommerceapp.data.cart
 
-
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.ecommerceapp.data.core.BaseDao
+import androidx.room.Upsert
+import com.example.ecommerceapp.data.core.BaseLocalDataSource
 import com.example.ecommerceapp.model.CartItem
 
 @Dao
-interface CartDao : BaseDao<CartItem> {
+interface LocalCartDataSource : BaseLocalDataSource<CartItem> {
+
     @Insert
     override suspend fun insertOne(item: CartItem)
 
@@ -28,4 +29,7 @@ interface CartDao : BaseDao<CartItem> {
 
     @Query("SELECT * FROM cart WHERE id = :id")
     override suspend fun findById(id: Int): CartItem?
+
+    @Upsert
+    override suspend fun upsertAll(items: List<CartItem>)
 }

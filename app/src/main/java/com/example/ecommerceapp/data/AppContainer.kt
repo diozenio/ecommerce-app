@@ -4,21 +4,20 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.ecommerceapp.MainViewModel
-import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.data.auth.UserSessionDao
 import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
-import com.example.ecommerceapp.data.repository.OrderRepository
-import com.example.ecommerceapp.data.repository.ReviewRepository
-import com.example.ecommerceapp.data.review.RoomLocalReviewDataSource
+import com.example.ecommerceapp.data.order.OrderManager
+import com.example.ecommerceapp.data.repository.AuthRepository
+import com.example.ecommerceapp.data.review.ReviewManager
 import com.example.ecommerceapp.screens.auth.LoginViewModel
-import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
+import com.example.ecommerceapp.screens.auth.SignUpViewModel
 
 object AppContainer {
     private var database: DatabaseHelper? = null
-    private var authManager: AuthManager? = null
     private var reviewRepository: ReviewRepository? = null
     private var orderRepository: OrderRepository? = null
+    private var authManager: AuthRepository? = null
 
 
     private fun getDatabase(context: Context): DatabaseHelper {
@@ -33,10 +32,10 @@ object AppContainer {
         return getDatabase(context).userSessionDao()
     }
 
-    fun getAuthManager(context: Context): AuthManager {
+    fun getAuthManager(context: Context): AuthRepository {
         return authManager ?: synchronized(this) {
-            authManager ?: AuthManager(
-                authService = APIService.authService,
+            authManager ?: AuthRepository(
+                remoteAuthService = APIService.remoteAuthApi,
                 userSessionDao = getUserSessionDao(context)
             ).also {
                 authManager = it
@@ -78,7 +77,7 @@ object AppContainer {
     }
 
     class MainViewModelFactory(
-        private val authManager: AuthManager
+        private val authManager: AuthRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
@@ -96,12 +95,25 @@ object AppContainer {
     }
 
     class LoginViewModelFactory(
-        private val authManager: AuthManager
+        private val authManager: AuthRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 return LoginViewModel(authManager) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+
+    class SignUpViewModelFactory(
+        private val authManager: AuthRepository
+    ) : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return SignUpViewModel(authManager) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
