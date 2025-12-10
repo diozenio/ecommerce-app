@@ -2,8 +2,8 @@ package com.example.ecommerceapp.screens.orders
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommerceapp.data.order.OrderManager
-import com.example.ecommerceapp.data.review.ReviewManager
+import com.example.ecommerceapp.data.repository.OrderRepository
+import com.example.ecommerceapp.data.repository.ReviewRepository
 import com.example.ecommerceapp.model.Order
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,8 +17,8 @@ sealed interface OrdersUiState {
 }
 
 class MyOrdersViewModel(
-    private val orderManager: OrderManager,
-    private val reviewManager: ReviewManager
+    private val orderRepository: OrderRepository,
+    private val reviewRepository: ReviewRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<OrdersUiState>(OrdersUiState.Loading)
@@ -27,7 +27,7 @@ class MyOrdersViewModel(
     fun loadOrders() {
         viewModelScope.launch {
             _uiState.value = OrdersUiState.Loading
-            val result = orderManager.loadOrders()
+            val result = orderRepository.loadOrders()
             _uiState.value = if (result.isSuccess) {
                 OrdersUiState.Success(result.getOrNull() ?: emptyList())
             } else {
@@ -38,7 +38,7 @@ class MyOrdersViewModel(
 
     fun submitReview(order: Order, rating: Float, reviewText: String) {
         viewModelScope.launch {
-            reviewManager.saveReview(order.id, rating, reviewText)
+            reviewRepository.saveReview(order.id, rating, reviewText)
 
             val currentState = _uiState.value
             if (currentState is OrdersUiState.Success) {

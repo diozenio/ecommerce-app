@@ -60,8 +60,8 @@ fun MyOrdersScreen(
     val context = LocalContext.current
 
     val factory = MyOrdersViewModelFactory(
-        orderManager = AppContainer.getOrderManager(context),
-        reviewManager = AppContainer.getReviewManager(context)
+        orderRepository = AppContainer.getOrderRepository(context),
+        reviewRepository = AppContainer.getReviewRepository(context)
     )
     val viewModel: MyOrdersViewModel = viewModel(factory = factory)
     val uiState by viewModel.uiState.collectAsState()
