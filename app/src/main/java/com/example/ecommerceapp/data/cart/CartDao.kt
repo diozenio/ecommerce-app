@@ -1,9 +1,9 @@
 package com.example.ecommerceapp.data.cart
 
-
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.ecommerceapp.data.core.BaseDao
@@ -11,7 +11,8 @@ import com.example.ecommerceapp.model.CartItem
 
 @Dao
 interface CartDao : BaseDao<CartItem> {
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun insertOne(item: CartItem)
 
     @Update
@@ -27,5 +28,5 @@ interface CartDao : BaseDao<CartItem> {
     override suspend fun findAll(): List<CartItem>
 
     @Query("SELECT * FROM cart WHERE id = :id")
-    override suspend fun findById(id: Int): CartItem?
+    suspend fun findById(id: Int): CartItem?
 }

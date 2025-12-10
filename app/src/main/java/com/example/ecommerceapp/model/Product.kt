@@ -1,5 +1,8 @@
 package com.example.ecommerceapp.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 enum class ProductSize {
     SMALL,
     MEDIUM,
@@ -19,7 +22,9 @@ data class Category(
     val title: String,
 )
 
+@Entity(tableName = "products")
 data class Product(
+    @PrimaryKey
     val id: String,
     val title: String,
     val sizes: List<ProductSize> = emptyList(),

@@ -10,50 +10,54 @@ import com.example.ecommerceapp.data.cart.CartDao
 import com.example.ecommerceapp.data.notification.NotificationConverter
 import com.example.ecommerceapp.data.notification.NotificationDao
 import com.example.ecommerceapp.data.product.ProductConverter
+import com.example.ecommerceapp.data.product.ProductDao
 import com.example.ecommerceapp.data.review.ReviewDao
+import com.example.ecommerceapp.data.saved.SavedDao
 import com.example.ecommerceapp.model.CartItem
 import com.example.ecommerceapp.model.Notification
 import com.example.ecommerceapp.model.OrderReview
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import com.example.ecommerceapp.model.Product
+import com.example.ecommerceapp.model.SavedItem
 import com.example.ecommerceapp.model.UserSession
-
+import kotlinx.coroutines.CoroutineScope
 
 @Database(
+    entities = [
+        UserSession::class,
+        Product::class,
+        CartItem::class,
+        Notification::class,
+        SavedItem::class,
+        OrderReview::class
+    ],
     version = 4,
-    entities = [CartItem::class, Notification::class, UserSession::class, OrderReview::class]
+    exportSchema = false
 )
 @TypeConverters(ProductConverter::class, NotificationConverter::class)
-
 abstract class DatabaseHelper : RoomDatabase() {
-    abstract fun cartDao(): CartDao
+
     abstract fun userSessionDao(): UserSessionDao
+    abstract fun productDao(): ProductDao
+    abstract fun cartDao(): CartDao
     abstract fun notificationDao(): NotificationDao
+    abstract fun savedDao(): SavedDao
     abstract fun reviewDao(): ReviewDao
 
     companion object {
         @Volatile
-        var INSTANCE: DatabaseHelper? = null
+        internal var INSTANCE: DatabaseHelper? = null
 
-        private val applicationScope = CoroutineScope(SupervisorJob())
-
-        fun getInstance(context: Context): DatabaseHelper {
+        fun getInstance(context: Context, scope: CoroutineScope): DatabaseHelper {
             return INSTANCE ?: synchronized(this) {
-                val newInstance = Room.databaseBuilder(
-                    context,
+                INSTANCE ?: Room.databaseBuilder(
+                    context.applicationContext,
                     DatabaseHelper::class.java,
-                    "ecommerce.db"
+                    "ecommerce_db"
                 )
-                    .fallbackToDestructiveMigration()
-                    .addCallback(
-                        AppDatabaseCallback(
-                            applicationScope
-                        )
-                    )
+                    .addCallback(AppDatabaseCallback(scope))
+                    .fallbackToDestructiveMigration(true)
                     .build()
-
-                INSTANCE = newInstance
-                newInstance
+                    .also { INSTANCE = it }
             }
         }
     }

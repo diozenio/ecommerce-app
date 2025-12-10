@@ -6,31 +6,61 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ecommerceapp.MainViewModel
 import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.data.auth.UserSessionDao
+import com.example.ecommerceapp.data.cart.CartDao
 import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
+import com.example.ecommerceapp.data.notification.NotificationDao
 import com.example.ecommerceapp.data.order.OrderManager
+import com.example.ecommerceapp.data.repository.SavedRepository
 import com.example.ecommerceapp.data.review.ReviewManager
+import com.example.ecommerceapp.data.saved.SavedDao
+import com.example.ecommerceapp.model.SavedViewModel
 import com.example.ecommerceapp.screens.auth.LoginViewModel
 import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 object AppContainer {
     private var database: DatabaseHelper? = null
     private var authManager: AuthManager? = null
     private var reviewManager: ReviewManager? = null
     private var orderManager: OrderManager? = null
+    private var savedRepository: SavedRepository? = null
 
+    // Escopo global para operações de banco de dados
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private fun getDatabase(context: Context): DatabaseHelper {
         return database ?: synchronized(this) {
-            database ?: DatabaseHelper.getInstance(context.applicationContext).also {
+            // CORREÇÃO: Passando 'applicationScope' conforme exigido pelo novo DatabaseHelper
+            database ?: DatabaseHelper.getInstance(context.applicationContext, applicationScope).also {
                 database = it
             }
         }
     }
 
+    // --- DAOs (Necessários para as telas e managers) ---
+
     private fun getUserSessionDao(context: Context): UserSessionDao {
         return getDatabase(context).userSessionDao()
     }
+
+    // CORREÇÃO: Métodos públicos para CartScreen e NotificationScreen
+    fun getCartDao(context: Context): CartDao {
+        return getDatabase(context).cartDao()
+    }
+
+    fun getNotificationDao(context: Context): NotificationDao {
+        return getDatabase(context).notificationDao()
+    }
+
+    // CORREÇÃO: Método necessário para o getSavedRepository
+    private fun getSavedDao(context: Context): SavedDao {
+        return getDatabase(context).savedDao()
+    }
+
+    // --- Managers e Repositories ---
 
     fun getAuthManager(context: Context): AuthManager {
         return authManager ?: synchronized(this) {
@@ -56,11 +86,43 @@ object AppContainer {
     fun getOrderManager(context: Context): OrderManager {
         return orderManager ?: synchronized(this) {
             orderManager ?: OrderManager(
+                // Certifique-se que APIService tem 'orderApi' definido
                 orderApi = APIService.orderApi,
                 reviewManager = getReviewManager(context)
             ).also {
                 orderManager = it
             }
+        }
+    }
+
+    fun getSavedRepository(context: Context): SavedRepository {
+        return savedRepository ?: synchronized(this) {
+            savedRepository ?: SavedRepository(
+                savedApi = APIService.savedApi,
+                savedDao = getSavedDao(context)
+            ).also {
+                savedRepository = it
+            }
+        }
+    }
+
+    // --- Factories ---
+
+    fun provideSavedViewModelFactory(context: Context): SavedViewModelFactory {
+        return SavedViewModelFactory(
+            repository = getSavedRepository(context)
+        )
+    }
+
+    class SavedViewModelFactory(
+        private val repository: SavedRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(SavedViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return SavedViewModel(repository) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 

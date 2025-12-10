@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.ecommerceapp.data.core.DatabaseHelper
+import com.example.ecommerceapp.data.AppContainer
 import com.example.ecommerceapp.data.notification.NotificationManager
 import com.example.ecommerceapp.model.Notification
 import com.example.ecommerceapp.model.NotificationCategory
@@ -41,7 +41,7 @@ import com.example.ecommerceapp.ui.components.UITextWeight
 @Composable
 fun NotificationScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val dao = remember { DatabaseHelper.getInstance(context).notificationDao() }
+    val dao = remember { AppContainer.getNotificationDao(context) }
     val manager = remember { NotificationManager(dao) }
 
     var groupedNotifications by remember { mutableStateOf<Map<String, List<Notification>>>(emptyMap()) }
@@ -153,27 +153,5 @@ fun NotificationItem(notification: Notification, modifier: Modifier = Modifier) 
                 )
             }
         }
-
-
     }
 }
-
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun NotificationScreenPreview() {
-//    NotificationScreen(navController = rememberNavController())
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun NotificationItemPreview() {
-//    Column {
-//        NotificationItem(
-//            notification = sampleNotifications.values.flatten()[0]
-//        )
-//        NotificationItem(
-//            notification = sampleNotifications.values.flatten()[1]
-//        )
-//    }
-//}
