@@ -2,7 +2,7 @@ package com.example.ecommerceapp.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommerceapp.data.auth.AuthManager
+import com.example.ecommerceapp.data.repository.AuthRepository
 import com.example.ecommerceapp.data.auth.AuthResult
 import com.example.ecommerceapp.util.validateEmail
 import com.example.ecommerceapp.util.validateName
@@ -32,7 +32,7 @@ data class SignUpUiState(
 )
 
 class SignUpViewModel(
-    private val authManager: AuthManager
+    private val authManager: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())

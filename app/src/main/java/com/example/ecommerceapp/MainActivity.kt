@@ -27,7 +27,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.ecommerceapp.data.AppContainer
-import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.model.BottomNavBarItem
 import com.example.ecommerceapp.screens.auth.LoginScreen
 import com.example.ecommerceapp.screens.auth.SignUpScreen
