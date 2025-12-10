@@ -1,22 +1,15 @@
 package com.example.ecommerceapp.screens
 
-import android.accounts.AccountManager
 import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.ecommerceapp.MainViewModel
-import com.example.ecommerceapp.data.AppContainer
-import com.example.ecommerceapp.data.auth.AuthManager
 import com.example.ecommerceapp.model.AccountNavItem
 import com.example.ecommerceapp.ui.components.UIIcon
 import com.example.ecommerceapp.ui.components.UIIconName
@@ -31,7 +24,7 @@ fun AccountScreen(navController: NavHostController) {
         AccountNavItem.MyOrdersItem,
     )
     val mainNavItems = listOf(
-        AccountNavItem.MyDetailsItem, 
+        AccountNavItem.MyDetailsItem,
         AccountNavItem.AddressBookItem,
         AccountNavItem.PaymentMethodsItem,
         AccountNavItem.NotificationsItem,
@@ -49,7 +42,7 @@ fun AccountScreen(navController: NavHostController) {
             UINavItem(
                 title = item.label,
                 leftIcon = item.icon,
-                onClick = { 
+                onClick = {
                     if (item.route.isNotEmpty()) {
                         navController.navigate(item.route)
                     }
@@ -62,7 +55,7 @@ fun AccountScreen(navController: NavHostController) {
             UINavItem(
                 title = item.label,
                 leftIcon = item.icon,
-                onClick = { 
+                onClick = {
                     if (item.route.isNotEmpty()) {
                         navController.navigate(item.route)
                     }
