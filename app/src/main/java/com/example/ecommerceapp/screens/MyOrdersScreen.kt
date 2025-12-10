@@ -1,7 +1,6 @@
 package com.example.ecommerceapp.screens
 
 import android.annotation.SuppressLint
-import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.flow.collectAsState
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
 import com.example.ecommerceapp.data.AppContainer
 import com.example.ecommerceapp.model.Order

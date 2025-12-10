@@ -9,11 +9,7 @@ import com.example.ecommerceapp.data.auth.UserSessionDao
 import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.data.order.OrderManager
-import com.example.ecommerceapp.data.order.RoomLocalOrderDataSource
 import com.example.ecommerceapp.data.review.ReviewManager
-import com.example.ecommerceapp.data.review.RoomLocalReviewDataSource
-import com.example.ecommerceapp.data.repository.OrderRepository
-import com.example.ecommerceapp.data.repository.ReviewRepository
 import com.example.ecommerceapp.screens.auth.LoginViewModel
 import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
 
@@ -22,8 +18,6 @@ object AppContainer {
     private var authManager: AuthManager? = null
     private var reviewManager: ReviewManager? = null
     private var orderManager: OrderManager? = null
-    private var orderRepository: OrderRepository? = null
-    private var reviewRepository: ReviewRepository? = null
 
 
     private fun getDatabase(context: Context): DatabaseHelper {
@@ -49,33 +43,12 @@ object AppContainer {
         }
     }
 
-    private fun getReviewRepository(context: Context): ReviewRepository {
-        return reviewRepository ?: synchronized(this) {
-            reviewRepository ?: ReviewRepository(
-                localDataSource = RoomLocalReviewDataSource(getDatabase(context).reviewDao())
-            ).also {
-                reviewRepository = it
-            }
-        }
-    }
-
     fun getReviewManager(context: Context): ReviewManager {
         return reviewManager ?: synchronized(this) {
             reviewManager ?: ReviewManager(
-                reviewRepository = getReviewRepository(context)
+                reviewDao = getDatabase(context).reviewDao()
             ).also {
                 reviewManager = it
-            }
-        }
-    }
-
-    private fun getOrderRepository(context: Context): OrderRepository {
-        return orderRepository ?: synchronized(this) {
-            orderRepository ?: OrderRepository(
-                localDataSource = RoomLocalOrderDataSource(getDatabase(context).orderDao()),
-                remoteDataSource = APIService.orderApi
-            ).also {
-                orderRepository = it
             }
         }
     }
@@ -83,7 +56,7 @@ object AppContainer {
     fun getOrderManager(context: Context): OrderManager {
         return orderManager ?: synchronized(this) {
             orderManager ?: OrderManager(
-                orderRepository = getOrderRepository(context),
+                orderApi = APIService.orderApi,
                 reviewManager = getReviewManager(context)
             ).also {
                 orderManager = it
