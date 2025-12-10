@@ -11,9 +11,11 @@ import com.example.ecommerceapp.data.notification.NotificationConverter
 import com.example.ecommerceapp.data.notification.NotificationDao
 import com.example.ecommerceapp.data.product.ProductConverter
 import com.example.ecommerceapp.data.product.ProductDao
+import com.example.ecommerceapp.data.review.ReviewDao
 import com.example.ecommerceapp.data.saved.SavedDao
 import com.example.ecommerceapp.model.CartItem
 import com.example.ecommerceapp.model.Notification
+import com.example.ecommerceapp.model.OrderReview
 import com.example.ecommerceapp.model.Product
 import com.example.ecommerceapp.model.SavedItem
 import com.example.ecommerceapp.model.UserSession
@@ -25,9 +27,10 @@ import kotlinx.coroutines.CoroutineScope
         Product::class,
         CartItem::class,
         Notification::class,
-        SavedItem::class
+        SavedItem::class,
+        OrderReview::class
     ],
-    version = 1,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(ProductConverter::class, NotificationConverter::class)
@@ -38,6 +41,7 @@ abstract class DatabaseHelper : RoomDatabase() {
     abstract fun cartDao(): CartDao
     abstract fun notificationDao(): NotificationDao
     abstract fun savedDao(): SavedDao
+    abstract fun reviewDao(): ReviewDao
 
     companion object {
         @Volatile
@@ -51,7 +55,7 @@ abstract class DatabaseHelper : RoomDatabase() {
                     "ecommerce_db"
                 )
                     .addCallback(AppDatabaseCallback(scope))
-                    .fallbackToDestructiveMigration(false)
+                    .fallbackToDestructiveMigration(true)
                     .build()
                     .also { INSTANCE = it }
             }

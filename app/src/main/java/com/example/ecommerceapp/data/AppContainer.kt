@@ -10,7 +10,10 @@ import com.example.ecommerceapp.data.cart.CartDao
 import com.example.ecommerceapp.data.core.APIService
 import com.example.ecommerceapp.data.core.DatabaseHelper
 import com.example.ecommerceapp.data.notification.NotificationDao
+import com.example.ecommerceapp.data.order.OrderManager
 import com.example.ecommerceapp.data.repository.SavedRepository
+import com.example.ecommerceapp.data.review.ReviewManager
+import com.example.ecommerceapp.data.saved.SavedDao
 import com.example.ecommerceapp.model.SavedViewModel
 import com.example.ecommerceapp.screens.auth.LoginViewModel
 import com.example.ecommerceapp.screens.auth.SignUpViewModelFactory
@@ -21,22 +24,29 @@ import kotlinx.coroutines.SupervisorJob
 object AppContainer {
     private var database: DatabaseHelper? = null
     private var authManager: AuthManager? = null
+    private var reviewManager: ReviewManager? = null
+    private var orderManager: OrderManager? = null
     private var savedRepository: SavedRepository? = null
+
+    // Escopo global para operações de banco de dados
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private fun getDatabase(context: Context): DatabaseHelper {
         return database ?: synchronized(this) {
+            // CORREÇÃO: Passando 'applicationScope' conforme exigido pelo novo DatabaseHelper
             database ?: DatabaseHelper.getInstance(context.applicationContext, applicationScope).also {
                 database = it
             }
         }
     }
 
+    // --- DAOs (Necessários para as telas e managers) ---
+
     private fun getUserSessionDao(context: Context): UserSessionDao {
         return getDatabase(context).userSessionDao()
     }
 
-
+    // CORREÇÃO: Métodos públicos para CartScreen e NotificationScreen
     fun getCartDao(context: Context): CartDao {
         return getDatabase(context).cartDao()
     }
@@ -45,7 +55,12 @@ object AppContainer {
         return getDatabase(context).notificationDao()
     }
 
-    private fun getSavedDao(context: Context) = getDatabase(context).savedDao()
+    // CORREÇÃO: Método necessário para o getSavedRepository
+    private fun getSavedDao(context: Context): SavedDao {
+        return getDatabase(context).savedDao()
+    }
+
+    // --- Managers e Repositories ---
 
     fun getAuthManager(context: Context): AuthManager {
         return authManager ?: synchronized(this) {
@@ -54,6 +69,28 @@ object AppContainer {
                 userSessionDao = getUserSessionDao(context)
             ).also {
                 authManager = it
+            }
+        }
+    }
+
+    fun getReviewManager(context: Context): ReviewManager {
+        return reviewManager ?: synchronized(this) {
+            reviewManager ?: ReviewManager(
+                reviewDao = getDatabase(context).reviewDao()
+            ).also {
+                reviewManager = it
+            }
+        }
+    }
+
+    fun getOrderManager(context: Context): OrderManager {
+        return orderManager ?: synchronized(this) {
+            orderManager ?: OrderManager(
+                // Certifique-se que APIService tem 'orderApi' definido
+                orderApi = APIService.orderApi,
+                reviewManager = getReviewManager(context)
+            ).also {
+                orderManager = it
             }
         }
     }
@@ -69,6 +106,7 @@ object AppContainer {
         }
     }
 
+    // --- Factories ---
 
     fun provideSavedViewModelFactory(context: Context): SavedViewModelFactory {
         return SavedViewModelFactory(

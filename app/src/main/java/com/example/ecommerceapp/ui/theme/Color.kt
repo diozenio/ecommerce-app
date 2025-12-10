@@ -14,5 +14,8 @@ object Colors {
     val Primary100 = Color(0xFFE6E6E6)
     val Primary0 = Color(0xFFFFFFFF)
     val Green = Color(0xFF0C9409)
+    val GreenLight = Color(0xFFE8F5E9)
+    val GreenDark = Color(0xFF2E7D32)
+    val Yellow = Color(0xFFFFC107)
     val Red = Color(0xFFED1010)
 }
